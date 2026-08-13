@@ -6,6 +6,19 @@ plugins {
     alias(libs.plugins.detekt)
 }
 
+// Read local.properties for secrets (not committed to git)
+fun readLocalProp(key: String, default: String): String {
+    val f = rootProject.file("local.properties")
+    if (!f.exists()) return default
+    f.readLines().forEach { line ->
+        val trimmed = line.trim()
+        if (trimmed.startsWith("$key=")) {
+            return trimmed.substringAfter("=")
+        }
+    }
+    return default
+}
+
 android {
     namespace = "com.aquasafe.monitor"
     compileSdk = 35
@@ -22,12 +35,12 @@ android {
         buildConfigField(
             "String",
             "SUPABASE_URL",
-            "\"${project.findProperty("SUPABASE_URL") ?: "https://YOUR_PROJECT.supabase.co"}\""
+            "\"${readLocalProp("SUPABASE_URL", project.findProperty("SUPABASE_URL") as? String ?: "https://YOUR_PROJECT.supabase.co")}\""
         )
         buildConfigField(
             "String",
             "SUPABASE_ANON_KEY",
-            "\"${project.findProperty("SUPABASE_ANON_KEY") ?: "YOUR_ANON_KEY"}\""
+            "\"${readLocalProp("SUPABASE_ANON_KEY", project.findProperty("SUPABASE_ANON_KEY") as? String ?: "YOUR_ANON_KEY")}\""
         )
     }
 
