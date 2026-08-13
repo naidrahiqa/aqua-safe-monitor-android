@@ -2,6 +2,10 @@
 
 Aplikasi Android untuk monitoring kualitas air real-time dari Supabase.
 
+**Related repos:**
+- [aqua-safe-monitor-web](https://github.com/naidrahiqa/aqua-safe-monitor-web) — Web dashboard (React + Vite + Tailwind + Leaflet)
+- [aqua_safe_monitor_opsi_2026](https://github.com/naidrahiqa/aqua_safe_monitor_opsi_2026) — Monorepo (legacy)
+
 ## Tech Stack
 
 - **Kotlin** + **Jetpack Compose** (Material 3)
