@@ -4,7 +4,6 @@ Aplikasi Android untuk monitoring kualitas air real-time dari Supabase.
 
 **Related repos:**
 - [aqua-safe-monitor](https://github.com/naidrahiqa/aqua-safe-monitor) — Web dashboard (React + Vite + Tailwind + Leaflet)
-- [aqua_safe_monitor_opsi_2026](https://github.com/naidrahiqa/aqua_safe_monitor_opsi_2026) — Monorepo (legacy)
 
 ## Tech Stack
 
@@ -71,12 +70,16 @@ org.gradle.java.home=C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.12.8-hotspot
 ```
 
 ### 3. Konfigurasi Supabase
-Edit `app/src/main/java/com/aquasafe/monitor/data/SupabaseConfig.kt`:
-```kotlin
-object SupabaseConfig {
-    const val SUPABASE_URL = "https://PROJECT_ID.supabase.co"
-    const val SUPABASE_ANON_KEY = "eyJ..."
-}
+Edit `gradle.properties`:
+```properties
+SUPABASE_URL=https://PROJECT_ID.supabase.co
+SUPABASE_ANON_KEY=eyJ...
+```
+
+Atau buat `local.properties` (tidak di-commit):
+```properties
+SUPABASE_URL=https://PROJECT_ID.supabase.co
+SUPABASE_ANON_KEY=eyJ...
 ```
 
 ### 4. Build & Install
@@ -116,11 +119,10 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 - **JetBrains Mono** — Data/numbers (bundled in `res/font/`)
 
 Text styles for data display:
-- `DataSmall` — 13sp, used in mini stats
-- `DataMedium` — 15sp, used in chart stats
+- `DataMedium` — 14sp, used in chart stats
 - `DataLarge` — 22sp, used in gauge values
-- `DataXLarge` — 34sp, used in main gauge values
-- `DataHero` — 42sp, used in WQI hero card
+- `DataXLarge` — 32sp, used in main gauge values
+- `DataHero` — 44sp, used in WQI hero card
 
 ### Components
 - **PanelCard** — kartu gelap + border halus, uses theme colors
