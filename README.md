@@ -170,6 +170,29 @@ CREATE POLICY "Public can read devices"
 
 **Penting**: Policy ini untuk mode demo. Untuk produksi, wajibkan login.
 
+## Integrasi dengan Web Dashboard
+
+App Android dan dashboard web berbagi backend Supabase yang sama:
+
+| Aspek | Web | Android |
+|-------|-----|---------|
+| **Backend** | Supabase (JS client) | Supabase (Ktor REST) |
+| **WQI Algorithm** | Weighted average (0.3 pH + 0.25 TDS + 0.25 Turb + 0.2 Temp) | Sama persis |
+| **Status Threshold** | >=80 SANGAT LAYAK, >=60 LAYAK, <60 BAHAYA | Sama persis |
+| **Sensor Colors** | `#F59E0B` pH, `#F97316` Suhu, `#22C55E` TDS, `#8B5CF6` Turb | Sama persis |
+
+### WQI Algorithm (Unified)
+
+```
+Sub-index pH:     100 if 6.5-8.5, interpolation 5.0-6.5 & 8.5-10.0
+Sub-index TDS:    100 if <=300, interpolation 300-500
+Sub-index Turb:   100 if <=1, interpolation 1-5
+Sub-index Temp:   100 if 20-30°C
+Weighted: pH*0.3 + TDS*0.25 + Turb*0.25 + Temp*0.2
+```
+
+Algoritma ini dijalankan di Edge Function (server-side) dan dicopy ke Android untuk kalkulasi lokal (test locations).
+
 ## Troubleshooting
 
 ### Build gagal: "Unsupported class file major version 69"

@@ -46,10 +46,12 @@ class SensorRepository(
     suspend fun fetchLatest(): SensorReading? = fetchReadings(1).firstOrNull()
 
     companion object {
+        val sharedJson: Json = Json { ignoreUnknownKeys = true }
+
         val defaultClient: HttpClient by lazy {
             HttpClient(OkHttp) {
                 install(ContentNegotiation) {
-                    json(Json { ignoreUnknownKeys = true })
+                    json(sharedJson)
                 }
                 install(HttpTimeout) {
                     requestTimeoutMillis = 15_000

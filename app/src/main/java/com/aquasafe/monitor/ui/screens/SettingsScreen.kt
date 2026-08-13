@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,12 +21,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.aquasafe.monitor.data.SupabaseConfig
+import com.aquasafe.monitor.BuildConfig
 import com.aquasafe.monitor.model.SensorConfigs
 import com.aquasafe.monitor.ui.components.PanelCard
 import com.aquasafe.monitor.ui.theme.Success
 import com.aquasafe.monitor.ui.theme.TextMuted
 import com.aquasafe.monitor.ui.theme.TextPrimary
 import com.aquasafe.monitor.ui.theme.TextSecondary
+import com.aquasafe.monitor.ui.theme.roundedMedium
 import com.aquasafe.monitor.viewmodel.DashboardUiState
 
 /** Pengaturan: konfigurasi supabase, ambang batas, tentang aplikasi */
@@ -48,7 +49,7 @@ fun SettingsScreen(state: DashboardUiState) {
 
         PanelCard(
             modifier = Modifier.fillMaxWidth(),
-            shape = MaterialTheme.shapes.medium as RoundedCornerShape,
+            shape = MaterialTheme.shapes.roundedMedium(),
         ) {
             Column(Modifier.padding(16.dp)) {
                 Text(
@@ -95,7 +96,7 @@ fun SettingsScreen(state: DashboardUiState) {
         Spacer(Modifier.height(14.dp))
         PanelCard(
             modifier = Modifier.fillMaxWidth(),
-            shape = MaterialTheme.shapes.medium as RoundedCornerShape,
+            shape = MaterialTheme.shapes.roundedMedium(),
         ) {
             Column(Modifier.padding(16.dp)) {
                 Text(
@@ -125,7 +126,7 @@ fun SettingsScreen(state: DashboardUiState) {
         Spacer(Modifier.height(14.dp))
         PanelCard(
             modifier = Modifier.fillMaxWidth(),
-            shape = MaterialTheme.shapes.medium as RoundedCornerShape,
+            shape = MaterialTheme.shapes.roundedMedium(),
         ) {
             Column(Modifier.padding(16.dp)) {
                 Text(
@@ -135,7 +136,7 @@ fun SettingsScreen(state: DashboardUiState) {
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    "WaterSafe Monitor v1.0.0",
+                    "WaterSafe Monitor v${BuildConfig.VERSION_NAME}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = TextSecondary,
                 )

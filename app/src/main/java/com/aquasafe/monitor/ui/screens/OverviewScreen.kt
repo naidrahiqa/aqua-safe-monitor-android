@@ -16,6 +16,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ChevronRight
+import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -47,6 +48,8 @@ import com.aquasafe.monitor.ui.theme.Success
 import com.aquasafe.monitor.ui.theme.TextMuted
 import com.aquasafe.monitor.ui.theme.TextPrimary
 import com.aquasafe.monitor.ui.theme.TextSecondary
+import com.aquasafe.monitor.ui.theme.roundedLarge
+import com.aquasafe.monitor.ui.theme.roundedSmall
 import com.aquasafe.monitor.ui.util.fmtAgo
 import com.aquasafe.monitor.viewmodel.DashboardUiState
 import kotlinx.coroutines.delay
@@ -118,7 +121,7 @@ fun OverviewScreen(
             if (state.error != null) {
                 Spacer(Modifier.height(12.dp))
                 PanelCard(
-                    shape = MaterialTheme.shapes.small as androidx.compose.foundation.shape.RoundedCornerShape,
+                    shape = MaterialTheme.shapes.roundedSmall(),
                 ) {
                     Text(
                         state.error,
@@ -186,7 +189,7 @@ fun OverviewScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { onNavigate("lokasi") },
-                shape = MaterialTheme.shapes.large as androidx.compose.foundation.shape.RoundedCornerShape,
+                shape = MaterialTheme.shapes.roundedLarge(),
             ) {
                 Row(
                     modifier = Modifier.padding(16.dp),

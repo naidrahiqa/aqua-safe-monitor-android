@@ -9,6 +9,7 @@ import com.aquasafe.monitor.model.SensorReading
 import com.aquasafe.monitor.model.TestLocation
 import com.aquasafe.monitor.model.computeWQI
 import com.aquasafe.monitor.model.wqiStatus
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -43,12 +44,28 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
     private val _uiState = MutableStateFlow(DashboardUiState())
     val uiState: StateFlow<DashboardUiState> = _uiState.asStateFlow()
 
+    private var pollJob: Job? = null
+    private var consecutiveErrors = 0
+
     init {
         viewModelScope.launch {
             _uiState.update { it.copy(locations = store.load()) }
             refresh()
+            startPolling()
+        }
+    }
+
+    private fun startPolling() {
+        pollJob?.cancel()
+        pollJob = viewModelScope.launch {
             while (true) {
-                delay(POLL_INTERVAL_MS)
+                val delayMs = if (consecutiveErrors > 0) {
+                    // Exponential backoff: 10s, 20s, 40s, max 60s
+                    (POLL_INTERVAL_MS * (1 shl (consecutiveErrors - 1).coerceAtMost(2))).coerceAtMost(60_000L)
+                } else {
+                    POLL_INTERVAL_MS
+                }
+                delay(delayMs)
                 refresh(showLoading = false)
             }
         }
@@ -68,6 +85,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
             if (showLoading) _uiState.update { it.copy(loading = true, error = null) }
             try {
                 val readings = repository.fetchReadings(200, sinceHours = sinceHours)
+                consecutiveErrors = 0
                 _uiState.update {
                     it.copy(
                         readings = readings,
@@ -78,6 +96,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
                     )
                 }
             } catch (e: Exception) {
+                consecutiveErrors++
                 _uiState.update {
                     it.copy(loading = false, error = e.message ?: "Gagal memuat data sensor")
                 }
@@ -156,6 +175,11 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
     private fun persistLocations() {
         val current = _uiState.value.locations
         viewModelScope.launch { store.save(current) }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        pollJob?.cancel()
     }
 
     companion object {

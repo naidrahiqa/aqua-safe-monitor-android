@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +25,7 @@ import com.aquasafe.monitor.ui.components.StatusChip
 import com.aquasafe.monitor.ui.theme.DataMedium
 import com.aquasafe.monitor.ui.theme.TextMuted
 import com.aquasafe.monitor.ui.theme.TextPrimary
+import com.aquasafe.monitor.ui.theme.roundedMedium
 import com.aquasafe.monitor.ui.util.fmtDateTime
 import com.aquasafe.monitor.viewmodel.DashboardUiState
 
@@ -65,7 +65,7 @@ fun HistoryScreen(state: DashboardUiState) {
 private fun ReadingCard(reading: SensorReading) {
     PanelCard(
         modifier = Modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.medium as RoundedCornerShape,
+        shape = MaterialTheme.shapes.roundedMedium(),
     ) {
         Column(Modifier.padding(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {

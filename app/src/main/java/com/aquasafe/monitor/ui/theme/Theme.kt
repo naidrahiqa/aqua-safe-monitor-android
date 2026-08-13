@@ -56,3 +56,8 @@ fun statusColor(status: WaterStatus): Color = when (status) {
     WaterStatus.LAYAK -> Warning
     WaterStatus.BAHAYA -> Danger
 }
+
+/** Safe accessor for theme shapes as RoundedCornerShape */
+fun androidx.compose.material3.Shapes.roundedSmall(): RoundedCornerShape = small as RoundedCornerShape
+fun androidx.compose.material3.Shapes.roundedMedium(): RoundedCornerShape = medium as RoundedCornerShape
+fun androidx.compose.material3.Shapes.roundedLarge(): RoundedCornerShape = large as RoundedCornerShape
