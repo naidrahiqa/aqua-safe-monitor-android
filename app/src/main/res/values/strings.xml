@@ -1,4 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">WaterSafe Monitor</string>
+
+    <!-- Navigation -->
+    <string name="nav_overview">Beranda</string>
+    <string name="nav_ph">pH Level</string>
+    <string name="nav_suhu">Suhu Air</string>
+    <string name="nav_tds">TDS</string>
+    <string name="nav_turbidity">Turbidity</string>
+    <string name="nav_history">Riwayat</string>
+    <string name="nav_map">Peta</string>
+    <string name="nav_settings">Pengaturan</string>
+
+    <!-- Overview -->
+    <string name="overview_title">WaterSafe Monitor</string>
+    <string name="overview_status_waiting">Menunggu data…</string>
+    <string name="overview_status_online">Online • %s</string>
+    <string name="overview_sensor_title">Kualitas Air</string>
+    <string name="overview_sensor_subtitle">Pembacaan sensor terbaru</string>
+    <string name="overview_location_title">Lokasi Pengujian</string>
+    <string name="overview_location_subtitle">%d lokasi tersimpan</string>
+    <string name="overview_location_card_title">Peta &amp; Pin Lokasi</string>
+    <string name="overview_location_card_subtitle">Ketuk untuk buka peta pengujian</string>
+
+    <!-- Time range filters -->
+    <string name="filter_all">Semua</string>
+    <string name="filter_1h">1 Jam</string>
+    <string name="filter_6h">6 Jam</string>
+    <string name="filter_24h">24 Jam</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Pengaturan Alert</string>
+    <string name="settings_subtitle">Threshold sensor untuk notifikasi</string>
+    <string name="settings_save">Simpan</string>
+    <string name="settings_saved">Tersimpan!</string>
+    <string name="settings_reset">Reset Default</string>
+
+    <!-- Alerts -->
+    <string name="alert_ph">pH</string>
+    <string name="alert_tds">TDS (ppm)</string>
+    <string name="alert_turbidity">Turbidity (NTU)</string>
+    <string name="alert_temp">Suhu (°C)</string>
+    <string name="alert_min">Min</string>
+    <string name="alert_max">Max</string>
+
+    <!-- Status -->
+    <string name="status_baik">BAIK</string>
+    <string name="status_layak">LAYAK</string>
+    <string name="status_bahaya">BAHAYA</string>
+    <string name="status_belum_data">BELUM ADA DATA</string>
+
+    <!-- General -->
+    <string name="error_generic">Terjadi kesalahan</string>
+    <string name="retry">Coba Lagi</string>
+    <string name="loading">Memuat…</string>
+    <string name="refresh">Refresh</string>
+    <string name="close">Tutup</string>
+    <string name="delete">Hapus</string>
+    <string name="cancel">Batal</string>
+    <string name="save">Simpan</string>
 </resources>

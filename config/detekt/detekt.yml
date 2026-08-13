@@ -1,0 +1,44 @@
+detekt:
+  build:
+    report:
+      report-file: build/reports/detekt/detekt.xml
+
+  input:
+    - src/main/java
+
+  filters:
+    excludes:
+      - "**/build/**"
+      - "**/resources/**"
+
+  complexity:
+    LongMethod:
+      threshold: 60
+    LongParameterList:
+      functionThreshold: 8
+      constructorThreshold: 10
+    TooManyFunctions:
+      thresholdInFiles: 20
+      thresholdInClasses: 20
+    ComplexMethod:
+      threshold: 15
+
+  style:
+    MaxLineLength:
+      maxLineLength: 120
+    MagicNumber:
+      active: false
+    ReturnCount:
+      max: 4
+    WildcardImport:
+      active: false
+
+  naming:
+    FunctionNaming:
+      pattern: "^[a-z][a-zA-Z0-9_]*$"
+    TopLevelPropertyNaming:
+      pattern: "^[A-Z][A-Za-z0-9_]*$"
+
+  empty-blocks:
+    EmptyFunctionBlock:
+      ignoreOverridden: true
