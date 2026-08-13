@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Backup rules for Android 11 and below.
+    Referenced in AndroidManifest.xml via android:fullBackupContent.
+-->
+<full-backup-content>
+    <!-- Exclude sensitive files from backup -->
+    <exclude domain="sharedpref" path="." />
+    <exclude domain="database" path="." />
+
+    <include domain="root" path="." />
+</full-backup-content>
