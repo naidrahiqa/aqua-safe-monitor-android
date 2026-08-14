@@ -7,17 +7,19 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,15 +36,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aquasafe.monitor.model.SensorConfig
-import com.aquasafe.monitor.ui.theme.AccentCyan
+import com.aquasafe.monitor.ui.theme.Border
+import com.aquasafe.monitor.ui.theme.BorderWidth
 import com.aquasafe.monitor.ui.theme.Danger
 import com.aquasafe.monitor.ui.theme.DataHero
 import com.aquasafe.monitor.ui.theme.DataXLarge
-import com.aquasafe.monitor.ui.theme.PanelLight
+import com.aquasafe.monitor.ui.theme.HardShadowSm
+import com.aquasafe.monitor.ui.theme.Panel
+import com.aquasafe.monitor.ui.theme.Radius
 import com.aquasafe.monitor.ui.theme.Success
 import com.aquasafe.monitor.ui.theme.TextMuted
 import com.aquasafe.monitor.ui.theme.TextPrimary
@@ -50,10 +54,7 @@ import com.aquasafe.monitor.ui.theme.Warning
 import java.util.Locale
 
 /**
- * Kartu gauge semi-lingkaran — konsep sama dengan GaugeCard versi web.
- * Arc digambar utuh di dalam canvas, teks nilai di bawah arc dengan
- * ukuran font dinamis supaya tidak pernah saling menimpa (fix bug web).
- * Sweep arc + angka mengisi dengan animasi spring saat pertama tampil.
+ * Neubrutalism gauge card — bold border + hard shadow + semi-circle arc
  */
 @Composable
 fun GaugeCard(
@@ -95,17 +96,30 @@ fun GaugeCard(
         label = "gaugeScale",
     )
 
-    PanelCard(
-        modifier = modifier.graphicsLayer {
-            scaleX = cardScale
-            scaleY = cardScale
-            alpha = cardScale
-        },
-    ) {
-        Column(Modifier.padding(14.dp)) {
+    Box(modifier) {
+        // Hard shadow
+        Box(
+            Modifier
+                .matchParentSize()
+                .offset(HardShadowSm.x, HardShadowSm.y)
+                .background(Color.Black.copy(alpha = 0.3f), MaterialTheme.shapes.medium)
+                .border(BorderWidth, Border, MaterialTheme.shapes.medium)
+        )
+        Column(
+            modifier = Modifier
+                .graphicsLayer {
+                    scaleX = cardScale
+                    scaleY = cardScale
+                    alpha = cardScale
+                }
+                .background(Panel, MaterialTheme.shapes.medium)
+                .border(BorderWidth, Border, MaterialTheme.shapes.medium)
+                .padding(14.dp),
+        ) {
+            // Uppercase title badge
             Text(
-                title,
-                style = MaterialTheme.typography.titleSmall,
+                title.uppercase(),
+                style = MaterialTheme.typography.labelSmall,
                 color = TextMuted,
             )
             Spacer(Modifier.height(8.dp))
@@ -122,6 +136,7 @@ fun GaugeCard(
                     val topLeft = Offset(centerX - r, centerY - r)
                     val arcSize = Size(2 * r, 2 * r)
 
+                    // Background arc
                     drawArc(
                         color = PanelLight,
                         startAngle = 180f,
@@ -132,6 +147,7 @@ fun GaugeCard(
                         style = Stroke(width = 10.dp.toPx(), cap = StrokeCap.Round),
                     )
                     if (sweep > 0f) {
+                        // Glow layer
                         drawArc(
                             color = color.copy(alpha = 0.28f),
                             startAngle = 180f,
@@ -141,6 +157,7 @@ fun GaugeCard(
                             size = arcSize,
                             style = Stroke(width = 16.dp.toPx(), cap = StrokeCap.Round),
                         )
+                        // Solid arc
                         drawArc(
                             color = color,
                             startAngle = 180f,
@@ -198,7 +215,11 @@ fun GaugeCard(
     }
 }
 
-/** Kartu hero Water Quality Index — ring melingkar beranimasi + angka count-up */
+private val PanelLight = Color(0xFF1E293B)
+
+/**
+ * Neubrutalism WQI hero card — full ring + big number
+ */
 @Composable
 fun WqiHeroCard(
     wqi: Double?,
@@ -231,17 +252,26 @@ fun WqiHeroCard(
         label = "wqiScale",
     )
 
-    PanelCard(
-        modifier = modifier.graphicsLayer {
-            scaleX = cardScale
-            scaleY = cardScale
-            alpha = cardScale
-        },
-    ) {
+    Box(modifier) {
+        // Hard shadow
+        Box(
+            Modifier
+                .matchParentSize()
+                .offset(HardShadowSm.x, HardShadowSm.y)
+                .background(Color.Black.copy(alpha = 0.3f), MaterialTheme.shapes.large)
+                .border(BorderWidth, Border, MaterialTheme.shapes.large)
+        )
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
+                .graphicsLayer {
+                    scaleX = cardScale
+                    scaleY = cardScale
+                    alpha = cardScale
+                }
                 .fillMaxWidth()
+                .background(Panel, MaterialTheme.shapes.large)
+                .border(BorderWidth, Border, MaterialTheme.shapes.large)
                 .padding(20.dp),
         ) {
             Box(
@@ -255,6 +285,7 @@ fun WqiHeroCard(
                     val center = Offset(size.width / 2f, size.height / 2f)
                     val topLeft = Offset(center.x - r, center.y - r)
                     val arcSize = Size(2 * r, 2 * r)
+                    // Background ring
                     drawArc(
                         color = PanelLight,
                         startAngle = -90f,
@@ -265,6 +296,7 @@ fun WqiHeroCard(
                         style = Stroke(width = 12.dp.toPx(), cap = StrokeCap.Round),
                     )
                     if (sweep > 0f) {
+                        // Glow
                         drawArc(
                             color = wqiColor.copy(alpha = 0.30f),
                             startAngle = -90f,
@@ -274,6 +306,7 @@ fun WqiHeroCard(
                             size = arcSize,
                             style = Stroke(width = 20.dp.toPx(), cap = StrokeCap.Round),
                         )
+                        // Solid
                         drawArc(
                             color = wqiColor,
                             startAngle = -90f,
@@ -308,21 +341,29 @@ fun WqiHeroCard(
                 }
             }
             Spacer(Modifier.height(12.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    Modifier
-                        .size(10.dp)
-                        .background(if (wqi == null) PanelLight else wqiColor, CircleShape),
-                )
-                Spacer(Modifier.width(8.dp))
-                Text(
-                    "Status: $statusLabel",
-                    style = MaterialTheme.typography.titleSmall,
-                    color = if (wqi == null) TextMuted else wqiColor,
-                )
+            // Status badge — neubrutalism style
+            Box(
+                Modifier
+                    .background(wqiColor.copy(alpha = 0.15f), RoundedCornerShape(Radius.pill))
+                    .border(BorderWidth, wqiColor.copy(alpha = 0.5f), RoundedCornerShape(Radius.pill))
+                    .padding(horizontal = 12.dp, vertical = 6.dp)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        Modifier
+                            .size(8.dp)
+                            .background(wqiColor, CircleShape),
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text(
+                        statusLabel.uppercase(),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = wqiColor,
+                    )
+                }
             }
             if (syncedText != null) {
-                Spacer(Modifier.height(4.dp))
+                Spacer(Modifier.height(6.dp))
                 Text(
                     syncedText,
                     style = MaterialTheme.typography.labelSmall,

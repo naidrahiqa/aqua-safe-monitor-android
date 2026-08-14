@@ -1,18 +1,23 @@
 package com.aquasafe.monitor.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ChevronRight
@@ -35,6 +40,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.aquasafe.monitor.model.SensorConfigs
 import com.aquasafe.monitor.model.valueOf
@@ -43,19 +50,23 @@ import com.aquasafe.monitor.ui.components.PanelCard
 import com.aquasafe.monitor.ui.components.SectionHeader
 import com.aquasafe.monitor.ui.components.StatusPill
 import com.aquasafe.monitor.ui.components.WqiHeroCard
+import com.aquasafe.monitor.ui.theme.AccentCyan
+import com.aquasafe.monitor.ui.theme.Border
+import com.aquasafe.monitor.ui.theme.BorderWidth
 import com.aquasafe.monitor.ui.theme.Danger
+import com.aquasafe.monitor.ui.theme.HardShadowSm
+import com.aquasafe.monitor.ui.theme.OnAccent
+import com.aquasafe.monitor.ui.theme.Panel
+import com.aquasafe.monitor.ui.theme.Radius
 import com.aquasafe.monitor.ui.theme.Success
 import com.aquasafe.monitor.ui.theme.TextMuted
 import com.aquasafe.monitor.ui.theme.TextPrimary
 import com.aquasafe.monitor.ui.theme.TextSecondary
-import com.aquasafe.monitor.ui.theme.roundedLarge
-import com.aquasafe.monitor.ui.theme.roundedSmall
 import com.aquasafe.monitor.ui.util.fmtAgo
 import com.aquasafe.monitor.viewmodel.DashboardUiState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-/** Beranda: status online, WQI hero ring, 4 gauge sensor, ringkasan lokasi */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OverviewScreen(
@@ -91,12 +102,18 @@ fun OverviewScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
         ) {
+            // Header
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
                     Text(
-                        "WaterSafe Monitor",
-                        style = MaterialTheme.typography.titleLarge,
+                        "WATERSAFE",
+                        style = MaterialTheme.typography.headlineLarge,
                         color = TextPrimary,
+                    )
+                    Text(
+                        "MONITOR",
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = AccentCyan,
                     )
                     Spacer(Modifier.height(6.dp))
                     StatusPill(
@@ -110,7 +127,7 @@ fun OverviewScreen(
                         CircularProgressIndicator(
                             Modifier.size(20.dp),
                             strokeWidth = 2.dp,
-                            color = MaterialTheme.colorScheme.primary,
+                            color = AccentCyan,
                         )
                     } else {
                         Icon(Icons.Rounded.Refresh, contentDescription = "Refresh", tint = TextSecondary)
@@ -118,10 +135,11 @@ fun OverviewScreen(
                 }
             }
 
+            // Error
             if (state.error != null) {
                 Spacer(Modifier.height(12.dp))
                 PanelCard(
-                    shape = MaterialTheme.shapes.roundedSmall(),
+                    borderColor = Danger,
                 ) {
                     Text(
                         state.error,
@@ -132,6 +150,7 @@ fun OverviewScreen(
                 }
             }
 
+            // WQI Hero
             Spacer(Modifier.height(16.dp))
             WqiHeroCard(
                 wqi = latest?.wqiScore,
@@ -139,28 +158,17 @@ fun OverviewScreen(
                 syncedText = latest?.let { "Terakhir update: ${fmtAgo(it.timestampMillis)}" },
             )
 
+            // Time filter chips
             Spacer(Modifier.height(16.dp))
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                val ranges = listOf(null to "Semua", 1 to "1 Jam", 6 to "6 Jam", 24 to "24 Jam")
-                ranges.forEach { (hours, label) ->
-                    FilterChip(
-                        selected = state.timeRangeHours == hours,
-                        onClick = { onSetTimeRange(hours) },
-                        label = { Text(label, style = MaterialTheme.typography.labelSmall) },
-                        colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
-                            selectedLabelColor = MaterialTheme.colorScheme.primary,
-                        ),
-                    )
-                }
-            }
+            TimeRangeChips(
+                selected = state.timeRangeHours,
+                onSelect = onSetTimeRange,
+            )
 
+            // Sensor gauges
             Spacer(Modifier.height(16.dp))
             SectionHeader(
-                title = "Kualitas Air",
+                title = "SENSOR DATA",
                 subtitle = "Pembacaan sensor terbaru",
             )
             Spacer(Modifier.height(10.dp))
@@ -180,25 +188,36 @@ fun OverviewScreen(
                 Spacer(Modifier.height(12.dp))
             }
 
+            // Location shortcut
             SectionHeader(
-                title = "Lokasi Pengujian",
+                title = "LOKASI UJI",
                 subtitle = "${state.locations.size} lokasi tersimpan",
             )
             Spacer(Modifier.height(10.dp))
-            PanelCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onNavigate("lokasi") },
-                shape = MaterialTheme.shapes.roundedLarge(),
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onNavigate("lokasi") }
             ) {
+                // Hard shadow
+                Box(
+                    Modifier
+                        .matchParentSize()
+                        .offset(HardShadowSm.x, HardShadowSm.y)
+                        .background(Color.Black.copy(alpha = 0.3f), MaterialTheme.shapes.medium)
+                        .border(BorderWidth, Border, MaterialTheme.shapes.medium)
+                )
                 Row(
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Panel, MaterialTheme.shapes.medium)
+                        .border(BorderWidth, Border, MaterialTheme.shapes.medium)
+                        .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Column(Modifier.weight(1f)) {
                         Text(
-                            "Peta & Pin Lokasi",
-                            style = MaterialTheme.typography.titleMedium,
+                            "PETA & PIN LOKASI",
+                            style = MaterialTheme.typography.titleSmall,
                             color = TextPrimary,
                         )
                         Spacer(Modifier.height(2.dp))
@@ -211,11 +230,43 @@ fun OverviewScreen(
                     Icon(
                         Icons.Rounded.ChevronRight,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
+                        tint = AccentCyan,
                     )
                 }
             }
             Spacer(Modifier.height(16.dp))
+        }
+    }
+}
+
+@Composable
+fun TimeRangeChips(
+    selected: Int?,
+    onSelect: (Int?) -> Unit,
+) {
+    val ranges = listOf(null to "Semua", 1 to "1 JAM", 6 to "6 JAM", 24 to "24 JAM")
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        ranges.forEach { (hours, label) ->
+            val isSelected = selected == hours
+            Box(
+                Modifier
+                    .clip(RoundedCornerShape(Radius.md))
+                    .then(
+                        if (isSelected) Modifier.background(AccentCyan).border(BorderWidth, AccentCyan, RoundedCornerShape(Radius.md))
+                        else Modifier.background(Panel).border(BorderWidth, Border, RoundedCornerShape(Radius.md))
+                    )
+                    .clickable { onSelect(hours) }
+                    .padding(horizontal = 14.dp, vertical = 8.dp)
+            ) {
+                Text(
+                    label,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = if (isSelected) OnAccent else TextSecondary,
+                )
+            }
         }
     }
 }

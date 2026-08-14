@@ -1,7 +1,7 @@
 package com.aquasafe.monitor.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -10,39 +10,43 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.aquasafe.monitor.model.WaterStatus
-import com.aquasafe.monitor.ui.theme.statusColor
+import com.aquasafe.monitor.ui.theme.Border
+import com.aquasafe.monitor.ui.theme.BorderWidth
+import com.aquasafe.monitor.ui.theme.Danger
+import com.aquasafe.monitor.ui.theme.Radius
+import com.aquasafe.monitor.ui.theme.Success
+import com.aquasafe.monitor.ui.theme.Warning
 
-/** Badge status kualitas air — warna mengikuti status (hijau/kuning/merah) */
 @Composable
 fun StatusChip(status: WaterStatus, modifier: Modifier = Modifier) {
-    val color = statusColor(status)
-    Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(50),
-        color = color.copy(alpha = 0.15f),
+    val (color, label) = when (status) {
+        WaterStatus.SANGAT_LAYAK -> Success to "SANGAT LAYAK"
+        WaterStatus.LAYAK -> Warning to "LAYAK"
+        WaterStatus.BAHAYA -> Danger to "BAHAYA"
+    }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .background(color.copy(alpha = 0.15f), RoundedCornerShape(Radius.pill))
+            .border(BorderWidth, color.copy(alpha = 0.5f), RoundedCornerShape(Radius.pill))
+            .padding(horizontal = 10.dp, vertical = 4.dp),
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
-        ) {
-            Box(
-                Modifier
-                    .size(8.dp)
-                    .background(color, CircleShape),
-            )
-            Spacer(Modifier.width(6.dp))
-            Text(
-                status.label,
-                style = MaterialTheme.typography.labelMedium,
-                color = color,
-            )
-        }
+        Spacer(
+            Modifier
+                .size(6.dp)
+                .background(color, CircleShape),
+        )
+        Spacer(Modifier.width(6.dp))
+        Text(
+            label,
+            style = MaterialTheme.typography.labelSmall,
+            color = color,
+        )
     }
 }

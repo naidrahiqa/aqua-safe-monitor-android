@@ -12,10 +12,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.aquasafe.monitor.model.WaterStatus
 
-/** Latar gradien "night sky" — dipakai di root app, semua layar konsisten */
 val AppBackgroundGradient = Brush.verticalGradient(
-    colors = listOf(SurfaceDeep, SurfaceDark, Color(0xFF03050A)),
-    endY = 2000f,
+    colors = listOf(SurfaceDark, SurfaceDeep),
 )
 
 private val AppColorScheme = darkColorScheme(
@@ -23,8 +21,8 @@ private val AppColorScheme = darkColorScheme(
     secondary = Warning,
     tertiary = Success,
     background = SurfaceDark,
-    surface = SurfaceDark,
-    surfaceVariant = Panel,
+    surface = Panel,
+    surfaceVariant = PanelLight,
     onBackground = TextPrimary,
     onSurface = TextPrimary,
     onSurfaceVariant = TextSecondary,
@@ -32,14 +30,15 @@ private val AppColorScheme = darkColorScheme(
 )
 
 private val AppShapes = Shapes(
-    extraSmall = RoundedCornerShape(10.dp),
-    small = RoundedCornerShape(12.dp),
-    medium = RoundedCornerShape(16.dp),
-    large = RoundedCornerShape(20.dp),
-    extraLarge = RoundedCornerShape(24.dp),
+    extraSmall = RoundedCornerShape(Radius.sm),
+    small = RoundedCornerShape(Radius.sm),
+    medium = RoundedCornerShape(Radius.md),
+    large = RoundedCornerShape(Radius.lg),
+    extraLarge = RoundedCornerShape(Radius.xl),
 )
 
-val CardBorderStroke: BorderStroke = BorderStroke(1.dp, CardBorder)
+val CardBorderStroke: BorderStroke = BorderStroke(BorderWidth, Border)
+val CardBorderHover: BorderStroke = BorderStroke(BorderWidth, BorderLight)
 
 @Composable
 fun WaterSafeTheme(content: @Composable () -> Unit) {

@@ -2,32 +2,44 @@ package com.aquasafe.monitor.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-/* ===== Surface & Panel ===== */
-val SurfaceDark = Color(0xFF040810)
-val SurfaceDeep = Color(0xFF060D1B)
-val Panel = Color(0xFF0B1526)
-val PanelLight = Color(0xFF13203A)
+// ===================================================================
+// AquaSafe Neubrutalism Palette
+// Bold borders, hard shadows, bright accents on dark background
+// ===================================================================
 
-/* ===== Text ===== */
-val TextPrimary = Color(0xFFF8FAFC)
-val TextSecondary = Color(0xFF94A3B8)
-val TextMuted = Color(0xFF64748B)
+// Background layers
+val SurfaceDark = Color(0xFF0A0E1A)      // Main background
+val SurfaceDeep = Color(0xFF060A14)      // Gradient bottom
+val Panel = Color(0xFF111827)            // Card background
+val PanelLight = Color(0xFF1E293B)       // Card hover / lighter variant
 
-/* ===== Accent ===== */
-val AccentCyan = Color(0xFF22D3EE)
-val AccentCyanSoft = Color(0x3322D3EE)
+// Borders & shadows
+val Border = Color(0xFF334155)           // Default card border
+val BorderLight = Color(0xFF475569)      // Hover / emphasis border
+val ShadowColor = Color(0xFF000000)      // Hard shadow
 
-/* ===== Semantic Status ===== */
-val Success = Color(0xFF22C55E)
-val Warning = Color(0xFFF59E0B)
-val Danger = Color(0xFFEF4444)
+// Text hierarchy
+val TextPrimary = Color(0xFFF1F5F9)      // Headings, values
+val TextSecondary = Color(0xFF94A3B8)    // Body text
+val TextMuted = Color(0xFF64748B)        // Hints, labels
 
-/* ===== Sensor Colors (matches SensorConfig) ===== */
-val PhColor = Color(0xFFF59E0B)
-val TempColor = Color(0xFFF97316)
-val TdsColor = Color(0xFF22C55E)
-val TurbidityColor = Color(0xFF8B5CF6)
-val WqiColor = Color(0xFF22D3EE)
+// Accent — primary brand color (cyan/teal)
+val AccentCyan = Color(0xFF06B6D4)
+val AccentCyanSoft = Color(0xFF22D3EE)
+val AccentCyanBg = Color(0xFF06B6D4)     // Badge bg
 
-/* ===== Glass / Border ===== */
-val CardBorder = Color(0x14FFFFFF)
+// Status colors — bold & saturated
+val Success = Color(0xFF22C55E)          // Safe / online
+val Warning = Color(0xFFF59E0B)          // Caution
+val Danger = Color(0xFFEF4444)           // Danger / error
+
+// Sensor accent colors
+val PhColor = Color(0xFFF59E0B)          // Amber
+val SuhuColor = Color(0xFFF97316)        // Orange
+val TdsColor = Color(0xFF22C55E)         // Green
+val TurbidityColor = Color(0xFF8B5CF6)   // Purple
+val WqiColor = Color(0xFF06B6D4)         // Cyan
+
+// Special
+val PinkAccent = Color(0xFFEC4899)
+val OnAccent = Color(0xFFFFFFFF)         // Text on accent bg

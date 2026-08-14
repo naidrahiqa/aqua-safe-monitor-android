@@ -7,12 +7,14 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -29,34 +31,50 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.aquasafe.monitor.ui.theme.CardBorder
+import com.aquasafe.monitor.ui.theme.Border
+import com.aquasafe.monitor.ui.theme.BorderWidth
+import com.aquasafe.monitor.ui.theme.HardShadow
+import com.aquasafe.monitor.ui.theme.HardShadowSm
+import com.aquasafe.monitor.ui.theme.Panel
+import com.aquasafe.monitor.ui.theme.Radius
 import com.aquasafe.monitor.ui.theme.TextMuted
 import com.aquasafe.monitor.ui.theme.TextPrimary
 
 /**
- * Blok desain bersama ("design system") — dipakai semua layar supaya
- * seluruh halaman terlihat konsisten: kartu panel gelap + header section.
+ * Neubrutalism card — bold 2px border + hard offset shadow
  */
-
-/** Kartu panel dengan border halus — dasar dari semua kartu di aplikasi */
 @Composable
 fun PanelCard(
     modifier: Modifier = Modifier,
-    shape: RoundedCornerShape = MaterialTheme.shapes.medium as RoundedCornerShape,
-    containerColor: Color = MaterialTheme.colorScheme.surfaceVariant,
+    shape: RoundedCornerShape = RoundedCornerShape(12.dp),
+    containerColor: Color = Panel,
+    borderColor: Color = Border,
+    shadowOffset: androidx.compose.ui.unit.DpOffset = HardShadowSm,
     content: @Composable () -> Unit,
 ) {
-    Card(
-        modifier = modifier,
-        shape = shape,
-        colors = CardDefaults.cardColors(containerColor = containerColor),
-        border = BorderStroke(1.dp, CardBorder),
-    ) {
-        content()
+    Box(modifier) {
+        // Hard shadow layer
+        Box(
+            Modifier
+                .matchParentSize()
+                .offset(shadowOffset.x, shadowOffset.y)
+                .border(BorderWidth, borderColor, shape)
+                .background(Color.Black.copy(alpha = 0.3f), shape)
+        )
+        // Main card
+        Card(
+            shape = shape,
+            colors = CardDefaults.cardColors(containerColor = containerColor),
+            border = BorderStroke(BorderWidth, borderColor),
+        ) {
+            content()
+        }
     }
 }
 
-/** Judul section konsisten: teks tebal + subtitle abu-abu */
+/**
+ * Section header — uppercase bold number badge + title
+ */
 @Composable
 fun SectionHeader(
     title: String,
@@ -73,14 +91,16 @@ fun SectionHeader(
             Spacer(Modifier.height(2.dp))
             Text(
                 subtitle,
-                style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodySmall,
                 color = TextMuted,
             )
         }
     }
 }
 
-/** Peringkat "online/live" — titik berwarna (bisa berdenyut) + teks */
+/**
+ * Status pill — colored badge with optional pulsing dot
+ */
 @Composable
 fun StatusPill(
     text: String,
@@ -98,7 +118,8 @@ fun StatusPill(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .background(color.copy(alpha = 0.12f), RoundedCornerShape(50))
+            .background(color.copy(alpha = 0.15f), RoundedCornerShape(Radius.pill))
+            .border(BorderWidth, color.copy(alpha = 0.4f), RoundedCornerShape(Radius.pill))
             .padding(horizontal = 10.dp, vertical = 5.dp),
     ) {
         Box(
@@ -112,6 +133,30 @@ fun StatusPill(
             text,
             style = MaterialTheme.typography.labelSmall,
             color = color,
+        )
+    }
+}
+
+/**
+ * Sticker badge — rotated neubrutalism tag
+ */
+@Composable
+fun StickerBadge(
+    text: String,
+    color: Color = MaterialTheme.colorScheme.primary,
+    rotation: Float = -3f,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier
+            .background(color, RoundedCornerShape(Radius.sm))
+            .border(BorderWidth, Border, RoundedCornerShape(Radius.sm))
+            .padding(horizontal = 8.dp, vertical = 3.dp)
+    ) {
+        Text(
+            text.uppercase(),
+            style = MaterialTheme.typography.labelSmall,
+            color = TextPrimary,
         )
     }
 }
