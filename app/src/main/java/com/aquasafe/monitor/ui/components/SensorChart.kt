@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import com.aquasafe.monitor.model.SensorConfig
+import com.aquasafe.monitor.ui.theme.AccentCyan
 import com.aquasafe.monitor.ui.theme.Border
 import com.aquasafe.monitor.ui.theme.BorderWidth
 import com.aquasafe.monitor.ui.theme.Danger
@@ -33,7 +34,6 @@ import com.aquasafe.monitor.ui.theme.Success
 import com.aquasafe.monitor.ui.theme.TextMuted
 import com.aquasafe.monitor.ui.theme.TextPrimary
 import com.aquasafe.monitor.ui.theme.Warning
-import com.aquasafe.monitor.ui.theme.isDarkTheme
 import com.aquasafe.monitor.ui.util.fmtAgo
 
 @Composable
@@ -43,7 +43,8 @@ fun SensorChart(
     config: SensorConfig,
     modifier: Modifier = Modifier,
 ) {
-    val color = Color(if (isDarkTheme) config.colorDark else config.color)
+    // Line always instrument blue — must stand apart from green/yellow/red zone bands
+    val color = AccentCyan
     Column(
         modifier = modifier
             .background(Panel, MaterialTheme.shapes.medium)
