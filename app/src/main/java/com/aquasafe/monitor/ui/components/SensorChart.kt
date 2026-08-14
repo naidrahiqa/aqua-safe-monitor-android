@@ -106,11 +106,13 @@ fun SensorChart(
                     fun drawBand(topV: Double, bottomV: Double, color: Color) {
                         val y1 = yOf(topV)
                         val y2 = yOf(bottomV)
-                        if (y2 <= y1) return
+                        val top = minOf(y1, y2)
+                        val bottom = maxOf(y1, y2)
+                        if (bottom - top < 0.5f) return
                         drawRect(
-                            color = color.copy(alpha = 0.10f),
-                            topLeft = Offset(0f, y1),
-                            size = androidx.compose.ui.geometry.Size(w, y2 - y1),
+                            color = color.copy(alpha = 0.14f),
+                            topLeft = Offset(0f, top),
+                            size = androidx.compose.ui.geometry.Size(w, bottom - top),
                         )
                     }
 
