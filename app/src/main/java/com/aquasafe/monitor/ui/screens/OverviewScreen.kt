@@ -166,19 +166,19 @@ fun OverviewScreen(
                         Icon(
                             Icons.Rounded.Warning,
                             contentDescription = null,
-                            tint = Color.White,
+                            tint = OnAccent,
                         )
                         Spacer(Modifier.width(10.dp))
                         Column {
                             Text(
                                 "BAHAYA! Air tidak layak",
                                 style = MaterialTheme.typography.titleSmall,
-                                color = Color.White,
+                                color = OnAccent,
                             )
                             Text(
                                 "WQI ${latest?.wqiScore?.toInt() ?: 0}/100 — hindari penggunaan air ini.",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = Color.White,
+                                color = OnAccent,
                             )
                         }
                     }

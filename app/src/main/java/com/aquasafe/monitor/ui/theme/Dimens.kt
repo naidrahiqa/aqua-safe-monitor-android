@@ -18,10 +18,10 @@ object Spacing {
 }
 
 object Radius {
-    val sm = 8.dp
-    val md = 12.dp
-    val lg = 16.dp
-    val xl = 20.dp
+    val sm = 4.dp
+    val md = 6.dp
+    val lg = 8.dp
+    val xl = 12.dp
     val pill = 50.dp
 }
 
@@ -42,7 +42,7 @@ object FontSize {
     val hero = 44.sp
 }
 
-// Neubrutalism shadow
+// Neubrutalism shadow — hard offset, no blur
 val HardShadow = androidx.compose.ui.unit.DpOffset(4.dp, 4.dp)
-val HardShadowSm = androidx.compose.ui.unit.DpOffset(2.dp, 2.dp)
+val HardShadowSm = androidx.compose.ui.unit.DpOffset(3.dp, 3.dp)
 val BorderWidth = 2.dp

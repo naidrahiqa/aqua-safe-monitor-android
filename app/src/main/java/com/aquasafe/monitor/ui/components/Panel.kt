@@ -35,6 +35,7 @@ import com.aquasafe.monitor.ui.theme.Border
 import com.aquasafe.monitor.ui.theme.BorderWidth
 import com.aquasafe.monitor.ui.theme.HardShadow
 import com.aquasafe.monitor.ui.theme.HardShadowSm
+import com.aquasafe.monitor.ui.theme.OnAccent
 import com.aquasafe.monitor.ui.theme.Panel
 import com.aquasafe.monitor.ui.theme.Radius
 import com.aquasafe.monitor.ui.theme.TextMuted
@@ -46,7 +47,7 @@ import com.aquasafe.monitor.ui.theme.TextPrimary
 @Composable
 fun PanelCard(
     modifier: Modifier = Modifier,
-    shape: RoundedCornerShape = RoundedCornerShape(12.dp),
+    shape: RoundedCornerShape = RoundedCornerShape(Radius.md),
     containerColor: Color = Panel,
     borderColor: Color = Border,
     shadowOffset: androidx.compose.ui.unit.DpOffset = HardShadowSm,
@@ -59,7 +60,7 @@ fun PanelCard(
                 .matchParentSize()
                 .offset(shadowOffset.x, shadowOffset.y)
                 .border(BorderWidth, borderColor, shape)
-                .background(Color.Black.copy(alpha = 0.3f), shape)
+                .background(Color.Black.copy(alpha = 0.4f), shape)
         )
         // Main card
         Card(
@@ -118,21 +119,21 @@ fun StatusPill(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .background(color.copy(alpha = 0.15f), RoundedCornerShape(Radius.pill))
-            .border(BorderWidth, color.copy(alpha = 0.4f), RoundedCornerShape(Radius.pill))
+            .background(color, RoundedCornerShape(Radius.sm))
+            .border(BorderWidth, Border, RoundedCornerShape(Radius.sm))
             .padding(horizontal = 10.dp, vertical = 5.dp),
     ) {
         Box(
             Modifier
                 .size(7.dp)
                 .scale(if (pulsing) pulse else 1f)
-                .background(color.copy(alpha = if (pulsing) pulse else 1f), CircleShape),
+                .background(OnAccent.copy(alpha = if (pulsing) pulse else 1f), CircleShape),
         )
         Spacer(Modifier.width(6.dp))
         Text(
             text,
             style = MaterialTheme.typography.labelSmall,
-            color = color,
+            color = OnAccent,
         )
     }
 }

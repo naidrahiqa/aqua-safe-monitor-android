@@ -1,22 +1,22 @@
 package com.aquasafe.monitor.ui.theme
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
-import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.aquasafe.monitor.model.WaterStatus
 
+// Flat solid background — neubrutalism has no gradients
 val AppBackgroundGradient = Brush.verticalGradient(
-    colors = listOf(SurfaceDark, SurfaceDeep),
+    colors = listOf(SurfaceDark, SurfaceDark),
 )
 
-private val AppColorScheme = darkColorScheme(
+private val AppColorScheme = lightColorScheme(
     primary = AccentCyan,
     secondary = Warning,
     tertiary = Success,
@@ -27,8 +27,13 @@ private val AppColorScheme = darkColorScheme(
     onSurface = TextPrimary,
     onSurfaceVariant = TextSecondary,
     error = Danger,
+    onPrimary = OnAccent,
+    onSecondary = OnAccent,
+    onTertiary = OnAccent,
+    onError = Color.White,
 )
 
+// Sharp corners — neubrutalism prefers square shapes
 private val AppShapes = Shapes(
     extraSmall = RoundedCornerShape(Radius.sm),
     small = RoundedCornerShape(Radius.sm),

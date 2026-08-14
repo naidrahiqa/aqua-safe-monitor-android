@@ -48,6 +48,7 @@ import com.aquasafe.monitor.ui.theme.HardShadowSm
 import com.aquasafe.monitor.ui.theme.Panel
 import com.aquasafe.monitor.ui.theme.Radius
 import com.aquasafe.monitor.ui.theme.Success
+import com.aquasafe.monitor.ui.theme.OnAccent
 import com.aquasafe.monitor.ui.theme.TextMuted
 import com.aquasafe.monitor.ui.theme.TextPrimary
 import com.aquasafe.monitor.ui.theme.Warning
@@ -147,16 +148,6 @@ fun GaugeCard(
                         style = Stroke(width = 10.dp.toPx(), cap = StrokeCap.Round),
                     )
                     if (sweep > 0f) {
-                        // Glow layer
-                        drawArc(
-                            color = color.copy(alpha = 0.28f),
-                            startAngle = 180f,
-                            sweepAngle = 180f * sweep,
-                            useCenter = false,
-                            topLeft = topLeft,
-                            size = arcSize,
-                            style = Stroke(width = 16.dp.toPx(), cap = StrokeCap.Round),
-                        )
                         // Solid arc
                         drawArc(
                             color = color,
@@ -215,7 +206,7 @@ fun GaugeCard(
     }
 }
 
-private val PanelLight = Color(0xFF1E293B)
+private val PanelLight = TextMuted
 
 /**
  * Neubrutalism WQI hero card — full ring + big number
@@ -341,24 +332,24 @@ fun WqiHeroCard(
                 }
             }
             Spacer(Modifier.height(12.dp))
-            // Status badge — neubrutalism style
+            // Status badge — neubrutalism solid candy pill
             Box(
                 Modifier
-                    .background(wqiColor.copy(alpha = 0.15f), RoundedCornerShape(Radius.pill))
-                    .border(BorderWidth, wqiColor.copy(alpha = 0.5f), RoundedCornerShape(Radius.pill))
+                    .background(wqiColor, RoundedCornerShape(Radius.sm))
+                    .border(BorderWidth, Border, RoundedCornerShape(Radius.sm))
                     .padding(horizontal = 12.dp, vertical = 6.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(
                         Modifier
                             .size(8.dp)
-                            .background(wqiColor, CircleShape),
+                            .background(OnAccent, CircleShape),
                     )
                     Spacer(Modifier.width(6.dp))
                     Text(
                         statusLabel.uppercase(),
                         style = MaterialTheme.typography.labelMedium,
-                        color = wqiColor,
+                        color = OnAccent,
                     )
                 }
             }

@@ -19,6 +19,7 @@ import com.aquasafe.monitor.model.WaterStatus
 import com.aquasafe.monitor.ui.theme.Border
 import com.aquasafe.monitor.ui.theme.BorderWidth
 import com.aquasafe.monitor.ui.theme.Danger
+import com.aquasafe.monitor.ui.theme.OnAccent
 import com.aquasafe.monitor.ui.theme.Radius
 import com.aquasafe.monitor.ui.theme.Success
 import com.aquasafe.monitor.ui.theme.Warning
@@ -33,20 +34,20 @@ fun StatusChip(status: WaterStatus, modifier: Modifier = Modifier) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .background(color.copy(alpha = 0.15f), RoundedCornerShape(Radius.pill))
-            .border(BorderWidth, color.copy(alpha = 0.5f), RoundedCornerShape(Radius.pill))
+            .background(color, RoundedCornerShape(Radius.sm))
+            .border(BorderWidth, Border, RoundedCornerShape(Radius.sm))
             .padding(horizontal = 10.dp, vertical = 4.dp),
     ) {
         Spacer(
             Modifier
                 .size(6.dp)
-                .background(color, CircleShape),
+                .background(OnAccent, CircleShape),
         )
         Spacer(Modifier.width(6.dp))
         Text(
             label,
             style = MaterialTheme.typography.labelSmall,
-            color = color,
+            color = OnAccent,
         )
     }
 }

@@ -30,7 +30,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         Configuration.getInstance().userAgentValue = packageName
-        enableEdgeToEdge()
+        enableEdgeToEdge(
+            statusBarStyle = androidx.activity.SystemBarStyle.light(
+                android.graphics.Color.TRANSPARENT,
+                android.graphics.Color.TRANSPARENT,
+            ),
+            navigationBarStyle = androidx.activity.SystemBarStyle.light(
+                android.graphics.Color.TRANSPARENT,
+                android.graphics.Color.TRANSPARENT,
+            ),
+        )
 
         // Keep splash visible while loading (optional: add logic to wait for data)
         splashScreen.setKeepOnScreenCondition { false }
