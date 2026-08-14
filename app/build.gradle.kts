@@ -100,6 +100,7 @@ dependencies {
 
     implementation(libs.osmdroid)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.workmanager)
 
     // Unit tests
     testImplementation(libs.junit)

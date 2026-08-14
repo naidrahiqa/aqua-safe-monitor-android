@@ -22,6 +22,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -147,6 +148,40 @@ fun OverviewScreen(
                         style = MaterialTheme.typography.bodySmall,
                         color = Danger,
                     )
+                }
+            }
+
+            // BAHAYA banner — muncul saat status terbaru berbahaya
+            val latestStatus = latest?.waterStatus
+            if (latestStatus == com.aquasafe.monitor.model.WaterStatus.BAHAYA) {
+                Spacer(Modifier.height(12.dp))
+                PanelCard(
+                    containerColor = Danger,
+                    borderColor = Danger,
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(12.dp),
+                    ) {
+                        Icon(
+                            Icons.Rounded.Warning,
+                            contentDescription = null,
+                            tint = Color.White,
+                        )
+                        Spacer(Modifier.width(10.dp))
+                        Column {
+                            Text(
+                                "BAHAYA! Air tidak layak",
+                                style = MaterialTheme.typography.titleSmall,
+                                color = Color.White,
+                            )
+                            Text(
+                                "WQI ${latest?.wqiScore?.toInt() ?: 0}/100 — hindari penggunaan air ini.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color.White,
+                            )
+                        }
+                    }
                 }
             }
 
