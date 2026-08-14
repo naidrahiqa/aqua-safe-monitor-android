@@ -31,11 +31,11 @@ class MainActivity : ComponentActivity() {
 
         Configuration.getInstance().userAgentValue = packageName
         enableEdgeToEdge(
-            statusBarStyle = androidx.activity.SystemBarStyle.light(
+            statusBarStyle = androidx.activity.SystemBarStyle.auto(
                 android.graphics.Color.TRANSPARENT,
                 android.graphics.Color.TRANSPARENT,
             ),
-            navigationBarStyle = androidx.activity.SystemBarStyle.light(
+            navigationBarStyle = androidx.activity.SystemBarStyle.auto(
                 android.graphics.Color.TRANSPARENT,
                 android.graphics.Color.TRANSPARENT,
             ),

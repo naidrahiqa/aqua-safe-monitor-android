@@ -33,6 +33,7 @@ import com.aquasafe.monitor.ui.theme.Success
 import com.aquasafe.monitor.ui.theme.TextMuted
 import com.aquasafe.monitor.ui.theme.TextPrimary
 import com.aquasafe.monitor.ui.theme.Warning
+import com.aquasafe.monitor.ui.theme.isDarkTheme
 import com.aquasafe.monitor.ui.util.fmtAgo
 
 @Composable
@@ -42,7 +43,7 @@ fun SensorChart(
     config: SensorConfig,
     modifier: Modifier = Modifier,
 ) {
-    val color = Color(config.color)
+    val color = Color(if (isDarkTheme) config.colorDark else config.color)
     Column(
         modifier = modifier
             .background(Panel, MaterialTheme.shapes.medium)

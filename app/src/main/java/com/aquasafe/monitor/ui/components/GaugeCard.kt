@@ -40,6 +40,7 @@ import com.aquasafe.monitor.ui.theme.Success
 import com.aquasafe.monitor.ui.theme.TextMuted
 import com.aquasafe.monitor.ui.theme.TextPrimary
 import com.aquasafe.monitor.ui.theme.Warning
+import com.aquasafe.monitor.ui.theme.isDarkTheme
 import java.util.Locale
 
 /**
@@ -53,7 +54,7 @@ fun GaugeCard(
     config: SensorConfig,
     modifier: Modifier = Modifier,
 ) {
-    val color = Color(config.color)
+    val color = Color(if (isDarkTheme) config.colorDark else config.color)
     val pct = if (value != null) {
         ((value - config.min) / (config.max - config.min)).coerceIn(0.0, 1.0)
     } else 0.0

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -151,48 +152,65 @@ fun AppRoot(viewModel: DashboardViewModel = viewModel()) {
 }
 
 /**
- * Industrial bottom nav — flat ink bar, no shadow, no bounce
+ * Industrial bottom nav — floating pill above the edge, no bounce
  */
 @Composable
 private fun PillNavBar(
     currentRoute: String?,
     onSelect: (AppDestination) -> Unit,
 ) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+    Box(
+        Modifier
             .fillMaxWidth()
-            .background(Panel)
-            .border(BorderWidth, Border)
-            .padding(horizontal = 6.dp, vertical = 6.dp),
+            .padding(horizontal = 14.dp, vertical = 8.dp)
+            .padding(bottom = 14.dp),
     ) {
-        AppDestination.All.forEach { destination ->
-            val selected = currentRoute == destination.route
+        // Hard offset shadow — crisp, not soft glow
+        Box(
+            Modifier
+                .matchParentSize()
+                .offset(3.dp, 3.dp)
+                .clip(RoundedCornerShape(Radius.lg))
+                .background(Color.Black.copy(alpha = 0.3f))
+                .border(BorderWidth, Border, RoundedCornerShape(Radius.lg)),
+        )
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(Radius.lg))
+                .background(Panel)
+                .border(BorderWidth, Border, RoundedCornerShape(Radius.lg))
+                .padding(horizontal = 6.dp, vertical = 6.dp),
+        ) {
+            AppDestination.All.forEach { destination ->
+                val selected = currentRoute == destination.route
 
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .weight(1f)
-                    .clip(RoundedCornerShape(Radius.md))
-                    .background(if (selected) AccentCyan else Color.Transparent)
-                    .clickable { onSelect(destination) }
-                    .padding(vertical = 8.dp),
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        destination.icon,
-                        contentDescription = destination.label,
-                        tint = if (selected) Color.White else TextSecondary,
-                        modifier = Modifier.size(22.dp),
-                    )
-                    Spacer(Modifier.height(2.dp))
-                    Text(
-                        destination.label.uppercase(),
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
-                        color = if (selected) Color.White else TextSecondary,
-                    )
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(Radius.md))
+                        .background(if (selected) AccentCyan else Color.Transparent)
+                        .clickable { onSelect(destination) }
+                        .padding(vertical = 8.dp),
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            destination.icon,
+                            contentDescription = destination.label,
+                            tint = if (selected) Color.White else TextSecondary,
+                            modifier = Modifier.size(22.dp),
+                        )
+                        Spacer(Modifier.height(2.dp))
+                        Text(
+                            destination.label.uppercase(),
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
+                            color = if (selected) Color.White else TextSecondary,
+                        )
+                    }
                 }
             }
         }
