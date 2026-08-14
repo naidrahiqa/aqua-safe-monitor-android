@@ -76,9 +76,12 @@ fun SensorChart(
                 val safeMax = config.safeMax
                 val margin = ((safeMax - safeMin) * 0.5).coerceAtLeast(1.0)
 
-                // Perluas rentang Y supaya zona ijo/kuning/merah selalu terlihat
-                val lo = minOf(minVal, safeMin - margin, config.min)
-                val hi = maxOf(maxVal, safeMax + margin, config.max)
+                // Auto-fit Y ke data + padding — chart nggak datar lagi.
+                // Zona ijo/kuning/merah tetap digambar dan ke-clip natural.
+                val spread = (maxVal - minVal).coerceAtLeast(1e-9)
+                val pad = (spread * 0.25).coerceAtLeast(0.5)
+                val lo = minVal - pad
+                val hi = maxVal + pad
 
                 Canvas(
                     Modifier
@@ -93,16 +96,20 @@ fun SensorChart(
                     fun yOf(v: Double): Float = ((hi - v) / range).toFloat() * h
 
                     // ===== Zona latar: MERAH → KUNING → HIJAU → KUNING → MERAH =====
+                    // Band di-clip ke rentang terlihat (intersect dulu, baru gambar)
                     fun drawBand(topV: Double, bottomV: Double, color: Color) {
-                        val y1 = yOf(topV)
-                        val y2 = yOf(bottomV)
-                        val top = minOf(y1, y2)
-                        val bottom = maxOf(y1, y2)
-                        if (bottom - top < 0.5f) return
+                        val vLo = minOf(topV, bottomV)
+                        val vHi = maxOf(topV, bottomV)
+                        val ovLo = maxOf(vLo, lo)
+                        val ovHi = minOf(vHi, hi)
+                        if (ovHi <= ovLo) return
+                        val yTop = yOf(ovHi)
+                        val yBottom = yOf(ovLo)
+                        if (yBottom - yTop < 0.5f) return
                         drawRect(
                             color = color.copy(alpha = 0.14f),
-                            topLeft = Offset(0f, top),
-                            size = androidx.compose.ui.geometry.Size(w, bottom - top),
+                            topLeft = Offset(0f, yTop),
+                            size = androidx.compose.ui.geometry.Size(w, yBottom - yTop),
                         )
                     }
 
