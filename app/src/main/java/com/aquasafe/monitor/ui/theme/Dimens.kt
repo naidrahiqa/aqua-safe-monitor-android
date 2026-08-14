@@ -18,10 +18,10 @@ object Spacing {
 }
 
 object Radius {
-    val sm = 4.dp
-    val md = 6.dp
-    val lg = 8.dp
-    val xl = 12.dp
+    val sm = 2.dp
+    val md = 2.dp
+    val lg = 4.dp
+    val xl = 6.dp
     val pill = 50.dp
 }
 

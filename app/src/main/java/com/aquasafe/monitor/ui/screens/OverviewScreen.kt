@@ -232,14 +232,6 @@ fun OverviewScreen(
                 .fillMaxWidth()
                 .clickable { onNavigate("lokasi") }
             ) {
-                // Hard shadow
-                Box(
-                    Modifier
-                        .matchParentSize()
-                        .offset(HardShadowSm.x, HardShadowSm.y)
-                        .background(Color.Black.copy(alpha = 0.3f), MaterialTheme.shapes.medium)
-                        .border(BorderWidth, Border, MaterialTheme.shapes.medium)
-                )
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

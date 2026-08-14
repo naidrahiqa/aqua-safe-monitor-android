@@ -1,14 +1,8 @@
 ﻿package com.aquasafe.monitor.ui.navigation
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -20,7 +14,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,7 +33,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -60,11 +52,8 @@ import com.aquasafe.monitor.ui.theme.AccentCyan
 import com.aquasafe.monitor.ui.theme.AppBackgroundGradient
 import com.aquasafe.monitor.ui.theme.Border
 import com.aquasafe.monitor.ui.theme.BorderWidth
-import com.aquasafe.monitor.ui.theme.HardShadowSm
-import com.aquasafe.monitor.ui.theme.OnAccent
 import com.aquasafe.monitor.ui.theme.Panel
 import com.aquasafe.monitor.ui.theme.Radius
-import com.aquasafe.monitor.ui.theme.TextMuted
 import com.aquasafe.monitor.ui.theme.TextPrimary
 import com.aquasafe.monitor.ui.theme.TextSecondary
 import com.aquasafe.monitor.viewmodel.DashboardUiState
@@ -116,20 +105,16 @@ fun AppRoot(viewModel: DashboardViewModel = viewModel()) {
                 startDestination = AppDestination.Beranda.route,
                 modifier = Modifier.padding(innerPadding),
                 enterTransition = {
-                    fadeIn(animationSpec = tween(240)) +
-                        scaleIn(initialScale = 0.97f, animationSpec = tween(240))
+                    fadeIn(animationSpec = tween(200))
                 },
                 exitTransition = {
-                    fadeOut(animationSpec = tween(180)) +
-                        scaleOut(targetScale = 0.99f, animationSpec = tween(180))
+                    fadeOut(animationSpec = tween(160))
                 },
                 popEnterTransition = {
-                    fadeIn(animationSpec = tween(240)) +
-                        scaleIn(initialScale = 0.97f, animationSpec = tween(240))
+                    fadeIn(animationSpec = tween(200))
                 },
                 popExitTransition = {
-                    fadeOut(animationSpec = tween(180)) +
-                        scaleOut(targetScale = 0.99f, animationSpec = tween(180))
+                    fadeOut(animationSpec = tween(160))
                 },
             ) {
                 composable(AppDestination.Beranda.route) {
@@ -166,85 +151,48 @@ fun AppRoot(viewModel: DashboardViewModel = viewModel()) {
 }
 
 /**
- * Neubrutalism bottom nav — bold border + hard shadow + bouncy icon
+ * Industrial bottom nav — flat ink bar, no shadow, no bounce
  */
 @Composable
 private fun PillNavBar(
     currentRoute: String?,
     onSelect: (AppDestination) -> Unit,
 ) {
-    val floatSpring = spring<Float>(dampingRatio = Spring.DampingRatioMediumBouncy)
-    val colorSpring = spring<Color>(dampingRatio = Spring.DampingRatioMediumBouncy)
-
-    Box(
-        Modifier
+    Row(
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 14.dp, vertical = 8.dp)
-            .padding(bottom = 18.dp),
+            .background(Panel)
+            .border(BorderWidth, Border)
+            .padding(horizontal = 6.dp, vertical = 6.dp),
     ) {
-        // Hard shadow
-        Box(
-            Modifier
-                .matchParentSize()
-                .offset(HardShadowSm.x, HardShadowSm.y)
-                .clip(RoundedCornerShape(Radius.lg))
-                .background(Color.Black.copy(alpha = 0.3f))
-                .border(BorderWidth, Border, RoundedCornerShape(Radius.lg))
-        )
-        Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(Radius.lg))
-                .background(Panel)
-                .border(BorderWidth, Border, RoundedCornerShape(Radius.lg))
-                .padding(horizontal = 6.dp, vertical = 6.dp),
-        ) {
-            AppDestination.All.forEach { destination ->
-                val selected = currentRoute == destination.route
-                val tint by animateColorAsState(
-                    targetValue = if (selected) OnAccent else TextMuted,
-                    animationSpec = colorSpring,
-                    label = "navTint",
-                )
-                val bg by animateColorAsState(
-                    targetValue = if (selected) AccentCyan else Color.Transparent,
-                    animationSpec = colorSpring,
-                    label = "navBg",
-                )
-                val iconScale by animateFloatAsState(
-                    targetValue = if (selected) 1.15f else 1f,
-                    animationSpec = floatSpring,
-                    label = "navScale",
-                )
+        AppDestination.All.forEach { destination ->
+            val selected = currentRoute == destination.route
 
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .weight(1f)
-                        .clip(RoundedCornerShape(Radius.md))
-                        .background(bg)
-                        .clickable { onSelect(destination) }
-                        .padding(vertical = 8.dp),
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(
-                            destination.icon,
-                            contentDescription = destination.label,
-                            tint = tint,
-                            modifier = Modifier
-                                .size(22.dp)
-                                .scale(iconScale),
-                        )
-                        Spacer(Modifier.height(2.dp))
-                        Text(
-                            destination.label.uppercase(),
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
-                            color = tint,
-                        )
-                    }
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(RoundedCornerShape(Radius.md))
+                    .background(if (selected) AccentCyan else Color.Transparent)
+                    .clickable { onSelect(destination) }
+                    .padding(vertical = 8.dp),
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Icon(
+                        destination.icon,
+                        contentDescription = destination.label,
+                        tint = if (selected) Color.White else TextSecondary,
+                        modifier = Modifier.size(22.dp),
+                    )
+                    Spacer(Modifier.height(2.dp))
+                    Text(
+                        destination.label.uppercase(),
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
+                        color = if (selected) Color.White else TextSecondary,
+                    )
                 }
             }
         }

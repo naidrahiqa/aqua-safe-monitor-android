@@ -144,28 +144,19 @@ fun SettingsScreen(state: DashboardUiState) {
     }
 }
 
-/** Neubrutalism panel wrapper */
+/** Industrial panel wrapper — flat, ink rule */
 @Composable
 private fun NeoPanel(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
-    Box(modifier.fillMaxWidth()) {
-        Box(
-            Modifier
-                .matchParentSize()
-                .offset(HardShadowSm.x, HardShadowSm.y)
-                .background(Color.Black.copy(alpha = 0.3f), MaterialTheme.shapes.medium)
-                .border(BorderWidth, Border, MaterialTheme.shapes.medium)
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Panel, MaterialTheme.shapes.medium)
-                .border(BorderWidth, Border, MaterialTheme.shapes.medium)
-                .padding(16.dp)
-        ) {
-            content()
-        }
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(Panel, MaterialTheme.shapes.medium)
+            .border(BorderWidth, Border, MaterialTheme.shapes.medium)
+            .padding(16.dp)
+    ) {
+        content()
     }
 }

@@ -1,9 +1,7 @@
 package com.aquasafe.monitor.ui.components
 
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -14,20 +12,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -35,7 +27,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aquasafe.monitor.model.SensorConfig
@@ -44,18 +35,15 @@ import com.aquasafe.monitor.ui.theme.BorderWidth
 import com.aquasafe.monitor.ui.theme.Danger
 import com.aquasafe.monitor.ui.theme.DataHero
 import com.aquasafe.monitor.ui.theme.DataXLarge
-import com.aquasafe.monitor.ui.theme.HardShadowSm
 import com.aquasafe.monitor.ui.theme.Panel
-import com.aquasafe.monitor.ui.theme.Radius
 import com.aquasafe.monitor.ui.theme.Success
-import com.aquasafe.monitor.ui.theme.OnAccent
 import com.aquasafe.monitor.ui.theme.TextMuted
 import com.aquasafe.monitor.ui.theme.TextPrimary
 import com.aquasafe.monitor.ui.theme.Warning
 import java.util.Locale
 
 /**
- * Neubrutalism gauge card — bold border + hard shadow + semi-circle arc
+ * Industrial gauge card — flat panel, ink rule, semi-circle arc
  */
 @Composable
 fun GaugeCard(
@@ -89,34 +77,13 @@ fun GaugeCard(
         valueText.length > 4 -> 22.sp
         else -> 26.sp
     }
-    var entered by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) { entered = true }
-    val cardScale by animateFloatAsState(
-        targetValue = if (entered) 1f else 0.92f,
-        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
-        label = "gaugeScale",
-    )
 
-    Box(modifier) {
-        // Hard shadow
-        Box(
-            Modifier
-                .matchParentSize()
-                .offset(HardShadowSm.x, HardShadowSm.y)
-                .background(Color.Black.copy(alpha = 0.3f), MaterialTheme.shapes.medium)
-                .border(BorderWidth, Border, MaterialTheme.shapes.medium)
-        )
-        Column(
-            modifier = Modifier
-                .graphicsLayer {
-                    scaleX = cardScale
-                    scaleY = cardScale
-                    alpha = cardScale
-                }
-                .background(Panel, MaterialTheme.shapes.medium)
-                .border(BorderWidth, Border, MaterialTheme.shapes.medium)
-                .padding(14.dp),
-        ) {
+    Column(
+        modifier = modifier
+            .background(Panel, MaterialTheme.shapes.medium)
+            .border(BorderWidth, Border, MaterialTheme.shapes.medium)
+            .padding(14.dp),
+    ) {
             // Uppercase title badge
             Text(
                 title.uppercase(),
@@ -203,7 +170,6 @@ fun GaugeCard(
                 )
             }
         }
-    }
 }
 
 private val PanelLight = TextMuted
@@ -235,36 +201,15 @@ fun WqiHeroCard(
         animationSpec = tween(1100, easing = FastOutSlowInEasing),
         label = "wqiValue",
     )
-    var entered by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) { entered = true }
-    val cardScale by animateFloatAsState(
-        targetValue = if (entered) 1f else 0.9f,
-        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
-        label = "wqiScale",
-    )
 
-    Box(modifier) {
-        // Hard shadow
-        Box(
-            Modifier
-                .matchParentSize()
-                .offset(HardShadowSm.x, HardShadowSm.y)
-                .background(Color.Black.copy(alpha = 0.3f), MaterialTheme.shapes.large)
-                .border(BorderWidth, Border, MaterialTheme.shapes.large)
-        )
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .graphicsLayer {
-                    scaleX = cardScale
-                    scaleY = cardScale
-                    alpha = cardScale
-                }
-                .fillMaxWidth()
-                .background(Panel, MaterialTheme.shapes.large)
-                .border(BorderWidth, Border, MaterialTheme.shapes.large)
-                .padding(20.dp),
-        ) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .fillMaxWidth()
+            .background(Panel, MaterialTheme.shapes.large)
+            .border(BorderWidth, Border, MaterialTheme.shapes.large)
+            .padding(20.dp),
+    ) {
             Box(
                 Modifier
                     .fillMaxWidth()
@@ -287,16 +232,6 @@ fun WqiHeroCard(
                         style = Stroke(width = 12.dp.toPx(), cap = StrokeCap.Round),
                     )
                     if (sweep > 0f) {
-                        // Glow
-                        drawArc(
-                            color = wqiColor.copy(alpha = 0.30f),
-                            startAngle = -90f,
-                            sweepAngle = 360f * sweep,
-                            useCenter = false,
-                            topLeft = topLeft,
-                            size = arcSize,
-                            style = Stroke(width = 20.dp.toPx(), cap = StrokeCap.Round),
-                        )
                         // Solid
                         drawArc(
                             color = wqiColor,
@@ -332,26 +267,19 @@ fun WqiHeroCard(
                 }
             }
             Spacer(Modifier.height(12.dp))
-            // Status badge — neubrutalism solid candy pill
-            Box(
-                Modifier
-                    .background(wqiColor, RoundedCornerShape(Radius.sm))
-                    .border(BorderWidth, Border, RoundedCornerShape(Radius.sm))
-                    .padding(horizontal = 12.dp, vertical = 6.dp)
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
-                        Modifier
-                            .size(8.dp)
-                            .background(OnAccent, CircleShape),
-                    )
-                    Spacer(Modifier.width(6.dp))
-                    Text(
-                        statusLabel.uppercase(),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = OnAccent,
-                    )
-                }
+            // Status — lamp + ink label, industrial style
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    Modifier
+                        .size(10.dp)
+                        .background(wqiColor),
+                )
+                Spacer(Modifier.width(6.dp))
+                Text(
+                    statusLabel.uppercase(),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = TextPrimary,
+                )
             }
             if (syncedText != null) {
                 Spacer(Modifier.height(6.dp))
@@ -361,6 +289,5 @@ fun WqiHeroCard(
                     color = TextMuted,
                 )
             }
-        }
     }
 }

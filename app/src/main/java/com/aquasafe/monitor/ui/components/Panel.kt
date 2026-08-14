@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -27,14 +26,13 @@ import androidx.compose.ui.unit.dp
 import com.aquasafe.monitor.ui.theme.Border
 import com.aquasafe.monitor.ui.theme.BorderWidth
 import com.aquasafe.monitor.ui.theme.HardShadowSm
-import com.aquasafe.monitor.ui.theme.OnAccent
 import com.aquasafe.monitor.ui.theme.Panel
 import com.aquasafe.monitor.ui.theme.Radius
 import com.aquasafe.monitor.ui.theme.TextMuted
 import com.aquasafe.monitor.ui.theme.TextPrimary
 
 /**
- * Neubrutalism card — bold 2px border + hard offset shadow
+ * Industrial panel card — flat, 2px ink rule, no shadow
  */
 @Composable
 fun PanelCard(
@@ -45,23 +43,13 @@ fun PanelCard(
     shadowOffset: androidx.compose.ui.unit.DpOffset = HardShadowSm,
     content: @Composable () -> Unit,
 ) {
-    Box(modifier) {
-        // Hard shadow layer
-        Box(
-            Modifier
-                .matchParentSize()
-                .offset(shadowOffset.x, shadowOffset.y)
-                .border(BorderWidth, borderColor, shape)
-                .background(Color.Black.copy(alpha = 0.4f), shape)
-        )
-        // Main card
-        Card(
-            shape = shape,
-            colors = CardDefaults.cardColors(containerColor = containerColor),
-            border = BorderStroke(BorderWidth, borderColor),
-        ) {
-            content()
-        }
+    Card(
+        modifier = modifier,
+        shape = shape,
+        colors = CardDefaults.cardColors(containerColor = containerColor),
+        border = BorderStroke(BorderWidth, borderColor),
+    ) {
+        content()
     }
 }
 
@@ -92,7 +80,7 @@ fun SectionHeader(
 }
 
 /**
- * Status pill — solid candy badge, static (no pulsing, no glow)
+ * Indicator lamp + label — industrial status, no pill fill
  */
 @Composable
 fun StatusPill(
@@ -102,21 +90,18 @@ fun StatusPill(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .background(color, RoundedCornerShape(Radius.sm))
-            .border(BorderWidth, Border, RoundedCornerShape(Radius.sm))
-            .padding(horizontal = 10.dp, vertical = 5.dp),
+        modifier = modifier,
     ) {
         Box(
             Modifier
-                .size(7.dp)
-                .background(OnAccent, CircleShape),
+                .size(8.dp)
+                .background(color),
         )
         Spacer(Modifier.width(6.dp))
         Text(
             text,
             style = MaterialTheme.typography.labelSmall,
-            color = OnAccent,
+            color = TextPrimary,
         )
     }
 }

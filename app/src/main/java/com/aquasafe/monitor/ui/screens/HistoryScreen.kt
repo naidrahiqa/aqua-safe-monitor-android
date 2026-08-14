@@ -74,22 +74,13 @@ fun HistoryScreen(state: DashboardUiState) {
 
 @Composable
 private fun ReadingCard(reading: SensorReading) {
-    Box {
-        // Hard shadow
-        Box(
-            Modifier
-                .matchParentSize()
-                .offset(HardShadowSm.x, HardShadowSm.y)
-                .background(Color.Black.copy(alpha = 0.3f), MaterialTheme.shapes.medium)
-                .border(BorderWidth, Border, MaterialTheme.shapes.medium)
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Panel, MaterialTheme.shapes.medium)
-                .border(BorderWidth, Border, MaterialTheme.shapes.medium)
-                .padding(14.dp)
-        ) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Panel, MaterialTheme.shapes.medium)
+            .border(BorderWidth, Border, MaterialTheme.shapes.medium)
+            .padding(14.dp)
+    ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
                     Text(
@@ -119,7 +110,6 @@ private fun ReadingCard(reading: SensorReading) {
                 color = MaterialTheme.colorScheme.primary,
             )
         }
-    }
 }
 
 @Composable
@@ -136,8 +126,4 @@ private fun MiniValue(label: String, value: String) {
             color = TextPrimary,
         )
     }
-}
-
-private object Color {
-    val Black = androidx.compose.ui.graphics.Color.Black
 }

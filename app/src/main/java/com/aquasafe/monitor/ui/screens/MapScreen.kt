@@ -93,21 +93,13 @@ fun MapScreen(
 
         Spacer(Modifier.height(16.dp))
         // Map — OpenStreetMap with location pins
-        Box {
-            Box(
-                Modifier
-                    .matchParentSize()
-                    .offset(HardShadowSm.x, HardShadowSm.y)
-                    .background(Color.Black.copy(alpha = 0.3f), MaterialTheme.shapes.large)
-                    .border(BorderWidth, Border, MaterialTheme.shapes.large)
-            )
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .height(280.dp)
-                    .clip(MaterialTheme.shapes.large)
-                    .border(BorderWidth, Border, MaterialTheme.shapes.large),
-            ) {
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .height(280.dp)
+                .clip(MaterialTheme.shapes.large)
+                .border(BorderWidth, Border, MaterialTheme.shapes.large),
+        ) {
                 WaterMap(
                     locations = state.locations,
                     modifier = Modifier.fillMaxSize(),
@@ -129,7 +121,6 @@ fun MapScreen(
                         .padding(horizontal = 10.dp, vertical = 4.dp),
                 )
             }
-        }
 
         Spacer(Modifier.height(16.dp))
         // Locations list
@@ -195,21 +186,13 @@ private fun LocationCard(
     onSync: () -> Unit,
     onDelete: () -> Unit,
 ) {
-    Box {
-        Box(
-            Modifier
-                .matchParentSize()
-                .offset(HardShadowSm.x, HardShadowSm.y)
-                .background(Color.Black.copy(alpha = 0.3f), MaterialTheme.shapes.medium)
-                .border(BorderWidth, Border, MaterialTheme.shapes.medium)
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Panel, MaterialTheme.shapes.medium)
-                .border(BorderWidth, Border, MaterialTheme.shapes.medium)
-                .padding(14.dp)
-        ) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Panel, MaterialTheme.shapes.medium)
+            .border(BorderWidth, Border, MaterialTheme.shapes.medium)
+            .padding(14.dp)
+    ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
                     Text(
@@ -267,7 +250,6 @@ private fun LocationCard(
                 }
             }
         }
-    }
 }
 
 @Composable

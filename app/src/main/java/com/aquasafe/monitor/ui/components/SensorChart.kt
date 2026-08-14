@@ -9,12 +9,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +27,6 @@ import com.aquasafe.monitor.ui.theme.Border
 import com.aquasafe.monitor.ui.theme.BorderWidth
 import com.aquasafe.monitor.ui.theme.Danger
 import com.aquasafe.monitor.ui.theme.DataMedium
-import com.aquasafe.monitor.ui.theme.HardShadowSm
 import com.aquasafe.monitor.ui.theme.Panel
 import com.aquasafe.monitor.ui.theme.PanelLight
 import com.aquasafe.monitor.ui.theme.Success
@@ -46,21 +43,12 @@ fun SensorChart(
     modifier: Modifier = Modifier,
 ) {
     val color = Color(config.color)
-    Box(modifier) {
-        // Hard shadow
-        Box(
-            Modifier
-                .matchParentSize()
-                .offset(HardShadowSm.x, HardShadowSm.y)
-                .background(Color.Black.copy(alpha = 0.3f), MaterialTheme.shapes.medium)
-                .border(BorderWidth, Border, MaterialTheme.shapes.medium)
-        )
-        Column(
-            modifier = Modifier
-                .background(Panel, MaterialTheme.shapes.medium)
-                .border(BorderWidth, Border, MaterialTheme.shapes.medium)
-                .padding(14.dp)
-        ) {
+    Column(
+        modifier = modifier
+            .background(Panel, MaterialTheme.shapes.medium)
+            .border(BorderWidth, Border, MaterialTheme.shapes.medium)
+            .padding(14.dp)
+    ) {
             Text(
                 label.uppercase(),
                 style = MaterialTheme.typography.labelSmall,
@@ -173,13 +161,11 @@ fun SensorChart(
                         "Min: ${fmtVal(minVal, config)}  •  Max: ${fmtVal(maxVal, config)}  •  ${values.size} readings",
                         style = MaterialTheme.typography.labelSmall,
                         color = TextMuted,
-                    )
+)
                 }
             }
         }
     }
-}
-
 private fun fmtVal(v: Double, config: SensorConfig): String = if (config.decimals == 0) {
     v.toInt().toString()
 } else {

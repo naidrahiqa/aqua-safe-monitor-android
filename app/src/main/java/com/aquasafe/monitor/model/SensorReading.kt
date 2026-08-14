@@ -52,33 +52,33 @@ object SensorConfigs {
     val PH = SensorConfig(
         key = "ph", label = "pH Level", unit = "pH",
         min = 0.0, max = 14.0, safeMin = 6.5, safeMax = 8.5,
-        color = 0xFFFFDE00,
+        color = 0xFFB26A00,
         safeNote = "Ideal 6.5 - 8.5 (WHO)",
     )
     val SUHU = SensorConfig(
         key = "suhu", label = "Suhu Air", unit = "°C",
         min = 0.0, max = 50.0, safeMin = 20.0, safeMax = 30.0,
-        color = 0xFFFF7A00,
+        color = 0xFFD84315,
         safeNote = "Normal 20 - 30°C",
     )
     val TDS = SensorConfig(
         key = "tds", label = "TDS", unit = "ppm",
         min = 0.0, max = 2000.0, safeMin = 0.0, safeMax = 500.0,
         decimals = 0,
-        color = 0xFF1FC968,
+        color = 0xFF2E7D32,
         safeNote = "Max aman 500 ppm (Permenkes)",
     )
     val TURBIDITY = SensorConfig(
         key = "turbidity", label = "Turbidity", unit = "NTU",
         min = 0.0, max = 200.0, safeMin = 0.0, safeMax = 5.0,
-        color = 0xFFB06AFF,
+        color = 0xFF6A3D9A,
         safeNote = "Max aman 5 NTU (Permenkes 492/2010)",
     )
     val WQI = SensorConfig(
         key = "wqi", label = "Water Quality Index", unit = "/100",
         min = 0.0, max = 100.0, safeMin = 80.0, safeMax = 100.0,
         decimals = 0,
-        color = 0xFF00C2FF,
+        color = 0xFF1D4ED8,
         safeNote = "Skor 80-100 sangat layak",
     )
 
