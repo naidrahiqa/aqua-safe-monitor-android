@@ -120,7 +120,6 @@ fun OverviewScreen(
                     StatusPill(
                         text = onlineText,
                         color = onlineColor,
-                        pulsing = latest != null,
                     )
                 }
                 IconButton(onClick = onRefresh) {
