@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import com.aquasafe.monitor.model.TestLocation
 import com.aquasafe.monitor.model.WaterStatus
 import com.aquasafe.monitor.ui.components.StatusChip
+import com.aquasafe.monitor.ui.components.WaterMap
 import com.aquasafe.monitor.ui.theme.AccentCyan
 import com.aquasafe.monitor.ui.theme.Border
 import com.aquasafe.monitor.ui.theme.BorderWidth
@@ -52,6 +53,7 @@ import com.aquasafe.monitor.ui.theme.HardShadowSm
 import com.aquasafe.monitor.ui.theme.OnAccent
 import com.aquasafe.monitor.ui.theme.Panel
 import com.aquasafe.monitor.ui.theme.PanelLight
+import com.aquasafe.monitor.ui.theme.Radius
 import com.aquasafe.monitor.ui.theme.Success
 import com.aquasafe.monitor.ui.theme.TextMuted
 import com.aquasafe.monitor.ui.theme.TextPrimary
@@ -68,6 +70,8 @@ fun MapScreen(
 ) {
     var showAddDialog by remember { mutableStateOf(false) }
     var deleteTarget by remember { mutableStateOf<TestLocation?>(null) }
+    var pickLat by remember { mutableStateOf(-6.5833) }
+    var pickLng by remember { mutableStateOf(110.6667) }
 
     Column(
         Modifier
@@ -88,7 +92,7 @@ fun MapScreen(
         )
 
         Spacer(Modifier.height(16.dp))
-        // Map placeholder — neubrutalism card
+        // Map — OpenStreetMap with location pins
         Box {
             Box(
                 Modifier
@@ -100,30 +104,30 @@ fun MapScreen(
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .height(250.dp)
-                    .background(PanelLight, MaterialTheme.shapes.large)
+                    .height(280.dp)
+                    .clip(MaterialTheme.shapes.large)
                     .border(BorderWidth, Border, MaterialTheme.shapes.large),
-                contentAlignment = Alignment.Center,
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        Icons.Rounded.LocationOn,
-                        contentDescription = null,
-                        tint = AccentCyan,
-                        modifier = Modifier.size(48.dp),
-                    )
-                    Spacer(Modifier.height(8.dp))
-                    Text(
-                        "KETUK UNTUK MENANDAI TITIK",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = TextMuted,
-                    )
-                    Text(
-                        "Integrasi peta segera hadir",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = TextMuted,
-                    )
-                }
+                WaterMap(
+                    locations = state.locations,
+                    modifier = Modifier.fillMaxSize(),
+                    onLongPress = { point ->
+                        pickLat = point.latitude
+                        pickLng = point.longitude
+                        showAddDialog = true
+                    },
+                )
+                Text(
+                    "TEKAN LAMA UNTUK TAMBAH PIN",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = TextPrimary,
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(top = 8.dp)
+                        .background(Panel.copy(alpha = 0.9f), RoundedCornerShape(Radius.pill))
+                        .border(BorderWidth, Border, RoundedCornerShape(Radius.pill))
+                        .padding(horizontal = 10.dp, vertical = 4.dp),
+                )
             }
         }
 
@@ -152,6 +156,8 @@ fun MapScreen(
     // Add dialog
     if (showAddDialog) {
         AddLocationDialog(
+            initialLat = pickLat,
+            initialLng = pickLng,
             onDismiss = { showAddDialog = false },
             onAdd = { name, lat, lng, temp, ph, tds, turb, notes ->
                 onAdd(name, lat, lng, temp, ph, tds, turb, notes)
@@ -274,12 +280,14 @@ private fun MiniValue(label: String, value: String) {
 
 @Composable
 private fun AddLocationDialog(
+    initialLat: Double,
+    initialLng: Double,
     onDismiss: () -> Unit,
     onAdd: (name: String, lat: Double, lng: Double, temp: Double, ph: Double, tds: Double, turb: Double, notes: String) -> Unit,
 ) {
     var name by remember { mutableStateOf("") }
-    var lat by remember { mutableStateOf("-6.5833") }
-    var lng by remember { mutableStateOf("110.6667") }
+    var lat by remember { mutableStateOf(String.format(java.util.Locale.US, "%.4f", initialLat)) }
+    var lng by remember { mutableStateOf(String.format(java.util.Locale.US, "%.4f", initialLng)) }
     var temp by remember { mutableStateOf("25.0") }
     var ph by remember { mutableStateOf("7.0") }
     var tds by remember { mutableStateOf("200") }
