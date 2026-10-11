@@ -1,6 +1,6 @@
 # AquaSafe Monitor — Android App
 
-Aplikasi Android untuk monitoring kualitas air real-time dari Supabase.
+Android app for real-time water quality monitoring from Supabase.
 
 **Related repos:**
 - [aqua-safe-monitor](https://github.com/naidrahiqa/aqua-safe-monitor) — Web dashboard (React + Vite + Tailwind + Leaflet)
@@ -9,43 +9,43 @@ Aplikasi Android untuk monitoring kualitas air real-time dari Supabase.
 
 - **Kotlin** + **Jetpack Compose** (Material 3)
 - **Gradle 8.9** + **AGP 8.7.3** + **JDK 21**
-- **Ktor Client** (OkHttp engine) — REST API ke Supabase
+- **Ktor Client** (OkHttp engine) — REST API to Supabase
 - **Kotlinx Serialization** — JSON parsing
-- **osmdroid** — peta OpenStreetMap (gratis, tanpa API key)
-- **DataStore Preferences** — local storage lokasi
+- **osmdroid** — OpenStreetMap map (free, no API key)
+- **DataStore Preferences** — local storage for locations
 
-## Struktur
+## Structure
 
 ```
 app/src/main/java/com/aquasafe/monitor/
 ├── MainActivity.kt
 ├── data/
-│   ├── SupabaseConfig.kt          # URL + anon key Supabase
-│   ├── SensorRepository.kt        # Fetch data dari REST API
-│   └── TestLocationStore.kt       # Simpan lokasi di DataStore
+│   ├── SupabaseConfig.kt          # Supabase URL + anon key
+│   ├── SensorRepository.kt        # Fetch data from the REST API
+│   └── TestLocationStore.kt       # Store locations in DataStore
 ├── model/
 │   ├── SensorReading.kt           # Data class + enum + SensorConfig
-│   └── TestLocation.kt            # Model lokasi pengujian
+│   └── TestLocation.kt            # Test location model
 ├── viewmodel/
-│   └── DashboardViewModel.kt      # Polling data + state management
+│   └── DashboardViewModel.kt      # Data polling + state management
 ├── ui/
-│   ├── navigation/AppNav.kt       # Bottom nav pill bar + NavHost + transisi layar
+│   ├── navigation/AppNav.kt       # Bottom nav pill bar + NavHost + screen transitions
 │   ├── screens/
-│   │   ├── OverviewScreen.kt      # Beranda: WQI + 4 gauge + lokasi
-│   │   ├── SensorScreen.kt        # Detail sensor per tab
-│   │   ├── MapScreen.kt           # Peta OSM (osmdroid) + pin berwarna
-│   │   ├── HistoryScreen.kt       # Riwayat pembacaan
-│   │   └── SettingsScreen.kt      # Pengaturan
+│   │   ├── OverviewScreen.kt      # Home: WQI + 4 gauges + locations
+│   │   ├── SensorScreen.kt        # Sensor detail per tab
+│   │   ├── MapScreen.kt           # OSM map (osmdroid) + colored pins
+│   │   ├── HistoryScreen.kt       # Reading history
+│   │   └── SettingsScreen.kt      # Settings
 │   ├── components/
 │   │   ├── Panel.kt               # Design system: PanelCard, SectionHeader, StatusPill
-│   │   ├── GaugeCard.kt           # Gauge semi-lingkaran animasi + WqiHeroCard
-│   │   ├── SensorChart.kt         # Line chart riwayat (gradient area)
-│   │   └── StatusChip.kt          # Chip status (SANGAT LAYAK/LAYAK/BAHAYA)
+│   │   ├── GaugeCard.kt           # Animated semi-circular gauge + WqiHeroCard
+│   │   ├── SensorChart.kt         # History line chart (gradient area)
+│   │   └── StatusChip.kt          # Status chip (VERY SUITABLE/SUITABLE/DANGER)
 │   ├── theme/
 │   │   ├── Color.kt               # Semantic colors (surfaces, status, sensors)
 │   │   ├── Type.kt                # WaterSafeTypography + Data* text styles
 │   │   └── Theme.kt               # Dark theme + shape tokens
-│   └── util/Formats.kt            # Format timestamp
+│   └── util/Formats.kt            # Timestamp formatting
 app/src/main/res/font/
     ├── jetbrainsmono_regular.ttf  # JetBrains Mono Regular
     ├── jetbrainsmono_medium.ttf   # JetBrains Mono Medium
@@ -56,38 +56,38 @@ app/src/main/res/font/
 
 ### 1. JDK 21
 ```bash
-# Cek sudah terpasang
-java -version  # harus openjdk 21.x
+# Check that it's installed
+java -version  # must be OpenJDK 21.x
 
-# Belum ada? Install via winget
+# Not installed yet? Install via winget
 winget install EclipseAdoptium.Temurin.21.JDK
 ```
 
-### 2. Gradle Config (global)
-Buat/edit `~/.gradle/gradle.properties`:
+### 2. Gradle config (global)
+Create/edit `~/.gradle/gradle.properties`:
 ```
 org.gradle.java.home=C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.12.8-hotspot
 ```
 
-### 3. Konfigurasi Supabase
+### 3. Supabase configuration
 Edit `gradle.properties`:
 ```properties
 SUPABASE_URL=https://PROJECT_ID.supabase.co
 SUPABASE_ANON_KEY=eyJ...
 ```
 
-Atau buat `local.properties` (tidak di-commit):
+Or create `local.properties` (not committed):
 ```properties
 SUPABASE_URL=https://PROJECT_ID.supabase.co
 SUPABASE_ANON_KEY=eyJ...
 ```
 
-### 4. Build & Install
+### 4. Build & install
 ```bash
 # Build
 gradlew.bat :app:assembleDebug
 
-# Install ke device (ADB)
+# Install to device (ADB)
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
@@ -96,20 +96,20 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 ### Colors (`ui/theme/Color.kt`)
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `SurfaceDark` | `#040810` | Background utama |
-| `SurfaceDeep` | `#060D1B` | Gradient bawah |
-| `Panel` | `#0B1526` | Kartu panel |
-| `PanelLight` | `#13203A` | Kartu hover |
-| `AccentCyan` | `#22D3EE` | Aksen utama |
-| `Success` | `#22C55E` | Status aman |
-| `Warning` | `#F59E0B` | Status peringatan |
-| `Danger` | `#EF4444` | Status bahaya |
+| `SurfaceDark` | `#040810` | Main background |
+| `SurfaceDeep` | `#060D1B` | Bottom gradient |
+| `Panel` | `#0B1526` | Panel cards |
+| `PanelLight` | `#13203A` | Hover cards |
+| `AccentCyan` | `#22D3EE` | Primary accent |
+| `Success` | `#22C55E` | Safe status |
+| `Warning` | `#F59E0B` | Warning status |
+| `Danger` | `#EF4444` | Danger status |
 
 ### Sensor Colors (matches web dashboard)
 | Sensor | Color |
 |--------|-------|
 | pH | `#F59E0B` (amber) |
-| Suhu | `#F97316` (orange) |
+| Temperature | `#F97316` (orange) |
 | TDS | `#22C55E` (green) |
 | Turbidity | `#8B5CF6` (purple) |
 | WQI | `#22D3EE` (cyan) |
@@ -125,42 +125,42 @@ Text styles for data display:
 - `DataHero` — 44sp, used in WQI hero card
 
 ### Components
-- **PanelCard** — kartu gelap + border halus, uses theme colors
-- **SectionHeader** — judul + subtitle abu-abu konsisten
-- **StatusPill** — status online/live dengan dot berdenyut
-- **GaugeCard** — gauge semi-lingkaran animasi + angka count-up
-- **SensorChart** — line chart riwayat dengan area gradien
+- **PanelCard** — dark card + subtle border, uses theme colors
+- **SectionHeader** — consistent title + gray subtitle
+- **StatusPill** — online/live status with pulsing dot
+- **GaugeCard** — animated semi-circular gauge + count-up numbers
+- **SensorChart** — history line chart with gradient area
 
-### Animasi
-- Ring WQI & gauge: sweep + angka **count-up** (`FastOutSlowInEasing`)
-- Kartu masuk layar dengan **spring** `DampingRatioMediumBouncy`
-- Bottom nav: ikon aktif membesar + glow
-- Pindah layar: fade + scale (`tween` 240ms)
+### Animations
+- WQI ring & gauges: sweep + **count-up** numbers (`FastOutSlowInEasing`)
+- Cards enter with a **spring** `DampingRatioMediumBouncy`
+- Bottom nav: active icon scales up + glows
+- Screen transitions: fade + scale (`tween` 240ms)
 
-## Fitur
+## Features
 
-### Dashboard (Beranda)
-- **WQI Hero Card** — ring animasi, skor 0-100 dengan warna, angka count-up
-- **4 Gauge Card** — pH, Suhu, TDS, Turbidity dengan indikator aman/tidak
-- **Filter Waktu** — chip "Semua | 1 Jam | 6 Jam | 24 Jam"
-- **Status Online** — dot hijau berdenyut + timestamp terakhir update
+### Dashboard (Home)
+- **WQI Hero Card** — animated ring, color-coded 0-100 score, count-up numbers
+- **4 Gauge Cards** — pH, Temperature, TDS, Turbidity with safe/unsafe indicators
+- **Time Filter** — "All | 1 Hour | 6 Hours | 24 Hours" chips
+- **Online Status** — pulsing green dot + last-update timestamp
 
 ### Sensor Detail
-- Tab per sensor (pH, Suhu, TDS, Turbidity)
-- Gauge + chart riwayat (area gradien di bawah garis) + status chip
-- Filter waktu yang sama
+- A tab per sensor (pH, Temperature, TDS, Turbidity)
+- Gauge + history chart (gradient area under the line) + status chip
+- Same time filter
 
-### Peta Lokasi (osmdroid / OpenStreetMap)
-- **Gratis 100%** — tanpa API key, tanpa kartu kredit
-- Pin berwarna sesuai status kualitas air
-- Ketuk peta → tandai titik → tombol + untuk simpan
-- Tambah/hapus lokasi + sinkron data sensor ke lokasi
+### Location Map (osmdroid / OpenStreetMap)
+- **100% free** — no API key, no credit card
+- Pins colored by water quality status
+- Tap the map to mark a point → press + to save
+- Add/remove locations + sync sensor data to a location
 
-## Koneksi ke Supabase
+## Connecting to Supabase
 
-App pakai **anon key** (public, tanpa login) dengan RLS policy:
+The app uses the **anon key** (public, no login) with RLS policies:
 ```sql
--- Public can read (untuk app Android anon)
+-- Public can read (for the anonymous Android app)
 CREATE POLICY "Public can read sensor data"
     ON public.sensor_data FOR SELECT USING (true);
 
@@ -168,18 +168,18 @@ CREATE POLICY "Public can read devices"
     ON public.devices FOR SELECT USING (true);
 ```
 
-**Penting**: Policy ini untuk mode demo. Untuk produksi, wajibkan login.
+**Important**: these policies are for demo mode. For production, require login.
 
-## Integrasi dengan Web Dashboard
+## Integration with the Web Dashboard
 
-App Android dan dashboard web berbagi backend Supabase yang sama:
+The Android app and the web dashboard share the same Supabase backend:
 
-| Aspek | Web | Android |
+| Aspect | Web | Android |
 |-------|-----|---------|
 | **Backend** | Supabase (JS client) | Supabase (Ktor REST) |
-| **WQI Algorithm** | Weighted average (0.3 pH + 0.25 TDS + 0.25 Turb + 0.2 Temp) | Sama persis |
-| **Status Threshold** | >=80 SANGAT LAYAK, >=60 LAYAK, <60 BAHAYA | Sama persis |
-| **Sensor Colors** | `#F59E0B` pH, `#F97316` Suhu, `#22C55E` TDS, `#8B5CF6` Turb | Sama persis |
+| **WQI Algorithm** | Weighted average (0.3 pH + 0.25 TDS + 0.25 Turb + 0.2 Temp) | Identical |
+| **Status Threshold** | >=80 VERY SUITABLE, >=60 SUITABLE, <60 DANGER | Identical |
+| **Sensor Colors** | `#F59E0B` pH, `#F97316` Temperature, `#22C55E` TDS, `#8B5CF6` Turb | Identical |
 
 ### WQI Algorithm (Unified)
 
@@ -191,20 +191,20 @@ Sub-index Temp:   100 if 20-30°C
 Weighted: pH*0.3 + TDS*0.25 + Turb*0.25 + Temp*0.2
 ```
 
-Algoritma ini dijalankan di Edge Function (server-side) dan dicopy ke Android untuk kalkulasi lokal (test locations).
+This algorithm runs in the Edge Function (server-side) and is copied to the Android app for local calculation (test locations).
 
 ## Troubleshooting
 
-### Build gagal: "Unsupported class file major version 69"
-→ JDK terlalu baru. Pastikan `org.gradle.java.home` di `~/.gradle/gradle.properties`指向 JDK 21.
+### Build fails: "Unsupported class file major version 69"
+→ JDK is too new. Make sure `org.gradle.java.home` in `~/.gradle/gradle.properties` points to JDK 21.
 
-### App kosong: "Menunggu data sensor..."
-1. Cek `SupabaseConfig.kt` sudah diisi URL + key
-2. Cek tabel `sensor_data` di Supabase dashboard ada data
-3. Cek RLS policy sudah diapply (lihat SQL di atas)
+### App is empty: "Waiting for sensor data..."
+1. Check that `SupabaseConfig.kt` has the URL + key filled in
+2. Check that the `sensor_data` table in the Supabase dashboard has data
+3. Check that the RLS policies are applied (see the SQL above)
 
-### Map kosong (osmdroid)
-→ Butuh koneksi internet (tile OSM di-download saat buka). Kalau offline, coba lagi nanti — tile tidak disimpan cache lama.
+### Map is empty (osmdroid)
+→ Requires an internet connection (OSM tiles are downloaded when opened). If offline, try again later — tiles are not cached.
 
-### Gauge tidak muncul indikator aman/tidak
-→ Pastikan value tidak null. Kalau null, tampil "Belum ada data" (abu-abu).
+### Gauge doesn't show the safe/unsafe indicator
+→ Make sure the value is not null. If null, it shows "No data yet" (gray).
